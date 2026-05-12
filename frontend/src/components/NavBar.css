@@ -1,0 +1,15 @@
+.navbar-background {
+    background-color: blue;
+}
+
+.navbar-items{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    list-style: none;
+}
+
+.navbar-item {
+    background-color: lightskyblue;
+    color: white;
+}
