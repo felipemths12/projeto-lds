@@ -27,6 +27,8 @@ public class Mensagem {
     private String tipo_mensagem;
     private String conteudo;
     private LocalDateTime data_envio;
-    private Boolean status_envio;
+
+    @Enumerated(EnumType.STRING)
+    private StatusEnvio status_envio;
     private LocalDateTime data_leitura;
 }

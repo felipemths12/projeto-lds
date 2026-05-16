@@ -30,5 +30,7 @@ public class Matricula {
     private Turma turma;
 
     private LocalDateTime data_realizacao;
-    private Boolean status_matricula;
+
+    @Enumerated(EnumType.STRING)
+    private StatusGeral status_matricula;
 }

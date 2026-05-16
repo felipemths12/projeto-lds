@@ -24,7 +24,9 @@ public class Curso {
     private String nome;
     private String descricao;
     private Integer carga_horaria;
-    private Boolean status_curso;
+
+    @Enumerated(EnumType.STRING)
+    private StatusEnvio status_curso;
 
     @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Turma> turmas = new ArrayList<>();

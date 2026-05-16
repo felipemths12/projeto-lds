@@ -27,5 +27,7 @@ public class Atendimento {
 
     private LocalDateTime dataHora_agendamento;
     private String assunto;
-    private Boolean status_atendimento;
+
+    @Enumerated(EnumType.STRING)
+    private StatusAtendimento status_atendimento;
 }
