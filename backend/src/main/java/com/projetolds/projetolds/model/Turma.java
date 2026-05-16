@@ -17,6 +17,11 @@ import java.util.List;
 @Setter
 public class Turma {
 
+    private Integer semestre;
+    private Integer ano;
+    private String turno;
+    private Integer numero_vagas;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codigo_turma;
@@ -28,8 +33,7 @@ public class Turma {
     @OneToMany(mappedBy = "turma", cascade = CascadeType.ALL)
     private List<Matricula> matriculas = new ArrayList<>();
 
-    private Integer semestre;
-    private Integer ano;
-    private String turno;
-    private Integer numero_vagas;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_funcionario", nullable = false)
+    private Funcionario professor;
 }

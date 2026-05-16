@@ -42,6 +42,9 @@ public class Aluno {
     @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL)
     private List<Mensagem> mensagens = new ArrayList<>();
 
+    @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL)
+    private List<Atendimento> atendimentos = new ArrayList<>();
+
     private String email;
 
     private LocalDateTime data_nascimento;

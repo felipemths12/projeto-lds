@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "funcionarios")
 @AllArgsConstructor
@@ -30,4 +33,10 @@ public class Funcionario {
 
     @Enumerated(EnumType.STRING)
     private StatusGeral status_ativo;
+
+    @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL)
+    private List<Turma> turmas = new ArrayList<>();
+
+    @OneToMany(mappedBy = "funcionario", cascade = CascadeType.ALL)
+    private List<Atendimento> atendimentos = new ArrayList<>();
 }

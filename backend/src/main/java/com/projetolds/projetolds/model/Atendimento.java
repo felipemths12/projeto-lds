@@ -30,4 +30,8 @@ public class Atendimento {
 
     @Enumerated(EnumType.STRING)
     private StatusAtendimento status_atendimento;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_funcionario", nullable = false)
+    private Funcionario funcionario;
 }
