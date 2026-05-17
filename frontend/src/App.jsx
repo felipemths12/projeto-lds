@@ -1,15 +1,18 @@
-import "./App.css";
-import {Routes, Route} from "react-router-dom";
-import Homepage from "./pages/Homepage";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import NavBar from './components/NavBar';
+import Homepage from './pages/Homepage.jsx';
+import Login from './pages/Login.jsx';
+import Cadastro from './pages/Cadastro.jsx';
 
-function App(){
-  return(
-    <>
-    <Routes>
-      <Route path="/" element={<Homepage/>}/>
-    </Routes>
-    </>
-  )
+export default function App() {
+  return (
+    <BrowserRouter>
+      <NavBar />
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/cadastro" element={<Cadastro />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
-
-export default App;
