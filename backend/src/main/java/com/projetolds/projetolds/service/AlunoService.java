@@ -1,6 +1,7 @@
 package com.projetolds.projetolds.service;
 
 import com.projetolds.projetolds.dto.AlunoCadastroDTO;
+import com.projetolds.projetolds.dto.AlunoListagemDTO;
 import com.projetolds.projetolds.model.Aluno;
 import com.projetolds.projetolds.model.Endereco;
 import com.projetolds.projetolds.model.Telefone;
@@ -8,6 +9,8 @@ import com.projetolds.projetolds.repository.AlunoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class AlunoService {
@@ -40,5 +43,12 @@ public class AlunoService {
 
         return alunoRepository.save(aluno);
 
+    }
+
+    public List<AlunoListagemDTO> listarTodos() {
+        return alunoRepository.findAll()
+                .stream()
+                .map(AlunoListagemDTO::new)
+                .toList();
     }
 }
