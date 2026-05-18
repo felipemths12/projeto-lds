@@ -1,4 +1,4 @@
-package com.projetolds.projetolds.model;
+package com.projetolds.projetolds.model.enums;
 
 public enum StatusAtendimento {
     EM_ATENDIMENTO("EM ATENDIMENTO"),

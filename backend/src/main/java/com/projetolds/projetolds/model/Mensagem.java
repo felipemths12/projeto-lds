@@ -1,5 +1,6 @@
 package com.projetolds.projetolds.model;
 
+import com.projetolds.projetolds.model.enums.StatusEnvio;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package com.projetolds.projetolds.controller;
 
-import com.projetolds.projetolds.dto.AlunoCadastroDTO;
-import com.projetolds.projetolds.dto.AlunoListagemDTO;
+import com.projetolds.projetolds.dto.aluno.AlunoCadastroDTO;
+import com.projetolds.projetolds.dto.aluno.AlunoListagemDTO;
 import com.projetolds.projetolds.service.AlunoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

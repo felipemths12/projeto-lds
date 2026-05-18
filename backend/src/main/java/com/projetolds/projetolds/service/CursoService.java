@@ -1,7 +1,7 @@
 package com.projetolds.projetolds.service;
 
-import com.projetolds.projetolds.dto.CursoCadastroDTO;
-import com.projetolds.projetolds.dto.CursoListagemDTO;
+import com.projetolds.projetolds.dto.curso.CursoCadastroDTO;
+import com.projetolds.projetolds.dto.curso.CursoListagemDTO;
 import com.projetolds.projetolds.model.Curso;
 import com.projetolds.projetolds.repository.CursoRepository;
 import org.springframework.beans.factory.annotation.Autowired;

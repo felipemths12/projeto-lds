@@ -1,4 +1,4 @@
-package com.projetolds.projetolds.dto;
+package com.projetolds.projetolds.dto.aluno;
 
 import com.projetolds.projetolds.model.Aluno;
 

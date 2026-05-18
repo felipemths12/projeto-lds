@@ -1,4 +1,4 @@
-package com.projetolds.projetolds.dto;
+package com.projetolds.projetolds.dto.aluno;
 
 public record AlunoCadastroDTO(String nome,
                                String cpf,

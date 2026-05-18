@@ -1,4 +1,4 @@
-package com.projetolds.projetolds.dto;
+package com.projetolds.projetolds.dto.curso;
 
 public record CursoCadastroDTO(
         String nome,

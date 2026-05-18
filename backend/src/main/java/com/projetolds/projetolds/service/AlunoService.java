@@ -1,7 +1,7 @@
 package com.projetolds.projetolds.service;
 
-import com.projetolds.projetolds.dto.AlunoCadastroDTO;
-import com.projetolds.projetolds.dto.AlunoListagemDTO;
+import com.projetolds.projetolds.dto.aluno.AlunoCadastroDTO;
+import com.projetolds.projetolds.dto.aluno.AlunoListagemDTO;
 import com.projetolds.projetolds.model.Aluno;
 import com.projetolds.projetolds.model.Endereco;
 import com.projetolds.projetolds.model.Telefone;
