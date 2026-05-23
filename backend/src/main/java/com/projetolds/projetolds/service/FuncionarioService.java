@@ -15,7 +15,7 @@ import java.util.List;
 public class FuncionarioService {
 
     @Autowired
-    FuncionarioRepository funcionarioRepository;
+    private FuncionarioRepository funcionarioRepository;
 
     public Funcionario cadastrarFuncionario(FuncionarioCadastroDTO funcionarioCadastroDTO) {
         Funcionario funcionario = new Funcionario();

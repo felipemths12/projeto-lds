@@ -16,7 +16,7 @@ import java.util.List;
 public class FuncionarioController {
 
     @Autowired
-    FuncionarioService funcionarioService;
+    private FuncionarioService funcionarioService;
 
     @PostMapping
     public ResponseEntity<Void> cadastrarFuncionario(@RequestBody FuncionarioCadastroDTO funcionarioCadastroDTO) {
