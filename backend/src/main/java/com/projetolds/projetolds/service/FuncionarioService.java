@@ -1,7 +1,7 @@
 package com.projetolds.projetolds.service;
 
-import com.projetolds.projetolds.dto.funcionário.FuncionarioCadastroDTO;
-import com.projetolds.projetolds.dto.funcionário.FuncionarioListagemDTO;
+import com.projetolds.projetolds.dto.funcionario.FuncionarioCadastroDTO;
+import com.projetolds.projetolds.dto.funcionario.FuncionarioListagemDTO;
 import com.projetolds.projetolds.model.Funcionario;
 import com.projetolds.projetolds.model.enums.Cargo;
 import com.projetolds.projetolds.model.enums.StatusGeral;

@@ -1,4 +1,4 @@
-package com.projetolds.projetolds.dto.funcionário;
+package com.projetolds.projetolds.dto.funcionario;
 
 import com.projetolds.projetolds.model.Funcionario;
 

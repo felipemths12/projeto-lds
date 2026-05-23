@@ -1,7 +1,7 @@
 package com.projetolds.projetolds.controller;
 
-import com.projetolds.projetolds.dto.funcionário.FuncionarioCadastroDTO;
-import com.projetolds.projetolds.dto.funcionário.FuncionarioListagemDTO;
+import com.projetolds.projetolds.dto.funcionario.FuncionarioCadastroDTO;
+import com.projetolds.projetolds.dto.funcionario.FuncionarioListagemDTO;
 import com.projetolds.projetolds.service.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
