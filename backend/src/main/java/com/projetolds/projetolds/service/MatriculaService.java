@@ -34,6 +34,14 @@ public class MatriculaService {
         Turma turma = turmaRepository.findById(matriculaCadastroDTO.codigo_turma())
                 .orElseThrow(() -> new RuntimeException("Turma não encontrada"));
 
+        if(matriculaRepository.existsByAlunoAndTurma(aluno, turma)) {
+            throw new RuntimeException("Matrícula bloqueda: O aluno selecionado já se encontra matriculado nessa turma.");
+        }
+
+        if(turma.getNumero_vagas() <= 0) {
+            throw new RuntimeException("Matrícula negada: Sem vagas disponíveis.");
+        }
+
         Matricula matricula = new Matricula();
 
         matricula.setAluno(aluno);
@@ -41,7 +49,12 @@ public class MatriculaService {
         matricula.setData_realizacao(LocalDateTime.now());
         matricula.setStatus_matricula(StatusGeral.ATIVO);
 
-        return matriculaRepository.save(matricula);
+        Matricula salvarMatricula = matriculaRepository.save(matricula);
+
+        turma.setNumero_vagas(turma.getNumero_vagas() - 1);
+        turmaRepository.save(turma);
+
+        return salvarMatricula;
     }
 
     public List<MatriculaListagemDTO> listarMatriculas() {
