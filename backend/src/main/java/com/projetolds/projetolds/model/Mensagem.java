@@ -32,4 +32,8 @@ public class Mensagem {
     @Enumerated(EnumType.STRING)
     private StatusEnvio status_envio;
     private LocalDateTime data_leitura;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "numero_protocolo", nullable = false)
+    private Atendimento atendimento;
 }

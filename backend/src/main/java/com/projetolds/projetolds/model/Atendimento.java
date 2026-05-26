@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "atendimentos")
@@ -35,4 +37,7 @@ public class Atendimento {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_funcionario", nullable = false)
     private Funcionario funcionario;
+
+    @OneToMany(mappedBy = "atendimento", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Mensagem> mensagens = new ArrayList<>();
 }
