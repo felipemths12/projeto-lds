@@ -1,5 +1,6 @@
 package com.projetolds.projetolds.model;
 
+import com.projetolds.projetolds.model.enums.StatusCurso;
 import com.projetolds.projetolds.model.enums.StatusEnvio;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,7 @@ public class Curso {
     private Integer carga_horaria;
 
     @Enumerated(EnumType.STRING)
-    private StatusEnvio status_curso;
+    private StatusCurso status_curso;
 
     @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Turma> turmas = new ArrayList<>();

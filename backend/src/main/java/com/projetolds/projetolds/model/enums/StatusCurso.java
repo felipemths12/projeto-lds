@@ -1,6 +1,8 @@
 package com.projetolds.projetolds.model.enums;
 
 public enum StatusCurso {
+    ATIVO("ATIVO"),
+    INATIVO("INATIVO"),
     CURSANDO("CURSANDO"),
     CONCLUIDO("CONCLUÍDO");
 
