@@ -1,6 +1,7 @@
 package com.projetolds.projetolds.model.enums;
 
 public enum StatusAtendimento {
+    ABERTO("ABERTO"),
     EM_ATENDIMENTO("EM ATENDIMENTO"),
     FINALIZADO("FINALIZADO");
 
