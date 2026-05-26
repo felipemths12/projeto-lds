@@ -36,4 +36,8 @@ public class Mensagem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "numero_protocolo", nullable = false)
     private Atendimento atendimento;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_funcionario", nullable = false)
+    private Funcionario funcionario;
 }
