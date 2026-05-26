@@ -1,5 +1,6 @@
 package com.projetolds.projetolds.controller;
 
+import com.projetolds.projetolds.dto.funcionario.FuncionarioAtualizacaoDTO;
 import com.projetolds.projetolds.dto.funcionario.FuncionarioCadastroDTO;
 import com.projetolds.projetolds.dto.funcionario.FuncionarioListagemDTO;
 import com.projetolds.projetolds.service.FuncionarioService;
@@ -28,5 +29,17 @@ public class FuncionarioController {
     public ResponseEntity<List<FuncionarioListagemDTO>> listarFuncionario() {
         List<FuncionarioListagemDTO> funcionarios = funcionarioService.listarTodosFuncionarios();
         return ResponseEntity.ok(funcionarios);
+    }
+
+    @PutMapping
+    public ResponseEntity<Void> atualizarFuncionarios(@RequestBody FuncionarioAtualizacaoDTO funcionarioAtualizacaoDTO) {
+        funcionarioService.atualizarFuncionario(funcionarioAtualizacaoDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> inativarFuncionarios(@PathVariable Long id) {
+        funcionarioService.inativarFuncionario(id);
+        return ResponseEntity.noContent().build();
     }
 }
