@@ -1,5 +1,6 @@
 package com.projetolds.projetolds.controller;
 
+import com.projetolds.projetolds.dto.matricula.MatriculaAtualizacaoDTO;
 import com.projetolds.projetolds.dto.matricula.MatriculaCadastroDTO;
 import com.projetolds.projetolds.dto.matricula.MatriculaListagemDTO;
 import com.projetolds.projetolds.service.MatriculaService;
@@ -28,6 +29,12 @@ public class MatriculaController {
     public ResponseEntity<List<MatriculaListagemDTO>> listar() {
         List<MatriculaListagemDTO> matriculas = matriculas = matriculaService.listarMatriculas();
         return ResponseEntity.ok(matriculas);
+    }
+
+    @PutMapping
+    public ResponseEntity<Void> atualizarMatriculas(@RequestBody MatriculaAtualizacaoDTO matriculaAtualizacaoDTO) {
+        matriculaService.atualizarMatriculas(matriculaAtualizacaoDTO);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
