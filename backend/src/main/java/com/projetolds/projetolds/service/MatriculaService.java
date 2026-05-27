@@ -5,12 +5,14 @@ import com.projetolds.projetolds.dto.matricula.MatriculaListagemDTO;
 import com.projetolds.projetolds.model.Aluno;
 import com.projetolds.projetolds.model.Matricula;
 import com.projetolds.projetolds.model.Turma;
+import com.projetolds.projetolds.model.enums.StatusCurso;
 import com.projetolds.projetolds.model.enums.StatusGeral;
 import com.projetolds.projetolds.repository.AlunoRepository;
 import com.projetolds.projetolds.repository.MatriculaRepository;
 import com.projetolds.projetolds.repository.TurmaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -59,5 +61,19 @@ public class MatriculaService {
 
     public List<MatriculaListagemDTO> listarMatriculas() {
         return matriculaRepository.findAll().stream().map(MatriculaListagemDTO::new).toList();
+    }
+
+    @Transactional
+    public void cancelarMatriculas(Long id) {
+        Matricula matricula = matriculaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Matrícula não encontrada."));
+
+        if (matricula.getStatus_matricula() == StatusGeral.ATIVO) {
+            matricula.setStatus_matricula(StatusGeral.INATIVO);
+
+            Turma turma = matricula.getTurma();
+            turma.setNumero_vagas(turma.getNumero_vagas() + 1);
+            turmaRepository.save(turma);
+        }
     }
 }
