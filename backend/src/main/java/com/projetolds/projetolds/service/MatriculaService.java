@@ -1,5 +1,6 @@
 package com.projetolds.projetolds.service;
 
+import com.projetolds.projetolds.dto.matricula.MatriculaAtualizacaoDTO;
 import com.projetolds.projetolds.dto.matricula.MatriculaCadastroDTO;
 import com.projetolds.projetolds.dto.matricula.MatriculaListagemDTO;
 import com.projetolds.projetolds.model.Aluno;
@@ -61,6 +62,55 @@ public class MatriculaService {
 
     public List<MatriculaListagemDTO> listarMatriculas() {
         return matriculaRepository.findAll().stream().map(MatriculaListagemDTO::new).toList();
+    }
+
+    @Transactional
+    public Matricula atualizarMatriculas(MatriculaAtualizacaoDTO matriculaAtualizacaoDTO) {
+        Matricula matricula = matriculaRepository.findById(matriculaAtualizacaoDTO.numero_matricula())
+                .orElseThrow(() -> new RuntimeException("Matrícula não encontrada"));
+
+        //Mudança de status
+        if (matriculaAtualizacaoDTO.status_matricula() != null) {
+            StatusGeral novoStatus = StatusGeral.valueOf(matriculaAtualizacaoDTO.status_matricula().toUpperCase());
+            StatusGeral statusAntigo = matricula.getStatus_matricula();
+
+            if (statusAntigo == StatusGeral.ATIVO && novoStatus != StatusGeral.ATIVO) {
+                Turma turmaAtual = matricula.getTurma();
+                turmaAtual.setNumero_vagas(turmaAtual.getNumero_vagas() + 1);
+                turmaRepository.save(turmaAtual);
+            } else if (statusAntigo != StatusGeral.ATIVO && novoStatus == StatusGeral.ATIVO) {
+                Turma turmaAtual = matricula.getTurma();
+                if (turmaAtual.getNumero_vagas() <=0) {
+                    throw new RuntimeException("Não há vagas disponíveis na turma para reativar a matrícula.");
+                }
+                turmaAtual.setNumero_vagas(turmaAtual.getNumero_vagas() - 1);
+                turmaRepository.save(turmaAtual);
+            }
+            matricula.setStatus_matricula(novoStatus);
+        }
+
+        //Mudança de turma
+        if(matriculaAtualizacaoDTO.codigo_turma() != null && !matriculaAtualizacaoDTO.codigo_turma().equals(matricula.getTurma().getCodigo_turma())) {
+            Turma novaTurma = turmaRepository.findById(matriculaAtualizacaoDTO.codigo_turma())
+                    .orElseThrow(() -> new RuntimeException("Nova turma não encontrada"));
+
+            if (novaTurma.getNumero_vagas() <= 0) {
+                throw new RuntimeException("A nova turma selecionada não possui vagas disponíveis.");
+            }
+
+            if(matricula.getStatus_matricula() == StatusGeral.ATIVO) {
+                Turma turmaAntiga = matricula.getTurma();
+                turmaAntiga.setNumero_vagas(turmaAntiga.getNumero_vagas() + 1);
+                turmaRepository.save(turmaAntiga);
+
+                novaTurma.setNumero_vagas(novaTurma.getNumero_vagas() - 1);
+                turmaRepository.save(novaTurma);
+            }
+
+            matricula.setTurma(novaTurma);
+        }
+
+        return matriculaRepository.save(matricula);
     }
 
     @Transactional
