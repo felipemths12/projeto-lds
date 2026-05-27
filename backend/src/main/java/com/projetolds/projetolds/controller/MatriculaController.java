@@ -29,4 +29,10 @@ public class MatriculaController {
         List<MatriculaListagemDTO> matriculas = matriculas = matriculaService.listarMatriculas();
         return ResponseEntity.ok(matriculas);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> cancelarMatriculas(@PathVariable Long id) {
+        matriculaService.cancelarMatriculas(id);
+        return ResponseEntity.noContent().build();
+    }
 }
