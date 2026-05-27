@@ -1,9 +1,12 @@
 package com.projetolds.projetolds.service;
 
+import com.projetolds.projetolds.dto.atendimento.AtendimentoCadastroDTO;
 import com.projetolds.projetolds.dto.matricula.MatriculaAtualizacaoDTO;
 import com.projetolds.projetolds.dto.matricula.MatriculaCadastroDTO;
 import com.projetolds.projetolds.dto.matricula.MatriculaListagemDTO;
+import com.projetolds.projetolds.dto.mensagem.EnviarMensagemDTO;
 import com.projetolds.projetolds.model.Aluno;
+import com.projetolds.projetolds.model.Atendimento;
 import com.projetolds.projetolds.model.Matricula;
 import com.projetolds.projetolds.model.Turma;
 import com.projetolds.projetolds.model.enums.StatusCurso;
@@ -29,6 +32,12 @@ public class MatriculaService {
 
     @Autowired
     private TurmaRepository turmaRepository;
+
+    @Autowired
+    private AtendimentoService atendimentoService;
+
+    @Autowired
+    private MensagemService mensagemService;
 
     public Matricula matricular (MatriculaCadastroDTO matriculaCadastroDTO) {
         Aluno aluno = alunoRepository.findById(matriculaCadastroDTO.codigo_aluno())
@@ -56,6 +65,29 @@ public class MatriculaService {
 
         turma.setNumero_vagas(turma.getNumero_vagas() - 1);
         turmaRepository.save(turma);
+
+        AtendimentoCadastroDTO atendimentoCadastroDTO = new AtendimentoCadastroDTO(
+                "Confirmação de matrícula" + turma.getCurso().getNome(),
+                aluno.getCodigo_aluno(),
+                turma.getProfessor().getId_funcionario()
+        );
+
+        Atendimento atendimentoCriado = atendimentoService.abrirAtendimento(atendimentoCadastroDTO);
+
+        String confirmacaoMatricula = String.format(
+                "Olá, %s! Sua matrícula na turma do curso de %s foi confirmada com sucesso. Seja bem-vindo(a)!",
+                aluno.getNome(),
+                turma.getCurso().getNome()
+        );
+
+        EnviarMensagemDTO enviarMensagemDTO = new EnviarMensagemDTO(
+                confirmacaoMatricula,
+                atendimentoCriado.getNumero_protocolo(),
+                turma.getProfessor().getId_funcionario(),
+                "FUNCIONARIO"
+                );
+
+        mensagemService.enviarMensagem(enviarMensagemDTO);
 
         return salvarMatricula;
     }
