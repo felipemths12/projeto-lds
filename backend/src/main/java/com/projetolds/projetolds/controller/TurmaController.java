@@ -1,5 +1,6 @@
 package com.projetolds.projetolds.controller;
 
+import com.projetolds.projetolds.dto.turma.TurmaAtualizacaoDTO;
 import com.projetolds.projetolds.dto.turma.TurmaCadastroDTO;
 import com.projetolds.projetolds.dto.turma.TurmaListagemDTO;
 import com.projetolds.projetolds.service.TurmaService;
@@ -28,5 +29,17 @@ public class TurmaController {
     public ResponseEntity<List<TurmaListagemDTO>> listarTurmas() {
         List<TurmaListagemDTO> turmas = turmaService.listarTurmas();
         return ResponseEntity.ok(turmas);
+    }
+
+    @PutMapping
+    public ResponseEntity<Void> atualizarTurmas(@RequestBody TurmaAtualizacaoDTO turmaAtualizacaoDTO) {
+        turmaService.atualizarTurma(turmaAtualizacaoDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarAlunos(@PathVariable Long id) {
+        turmaService.deletarTurma(id);
+        return ResponseEntity.noContent().build();
     }
 }
