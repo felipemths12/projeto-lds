@@ -1,5 +1,6 @@
 package com.projetolds.projetolds.service;
 
+import com.projetolds.projetolds.dto.aluno.AlunoAtualizacaoDTO;
 import com.projetolds.projetolds.dto.aluno.AlunoCadastroDTO;
 import com.projetolds.projetolds.dto.aluno.AlunoListagemDTO;
 import com.projetolds.projetolds.model.Aluno;
@@ -50,5 +51,34 @@ public class AlunoService {
                 .stream()
                 .map(AlunoListagemDTO::new)
                 .toList();
+    }
+
+    @Transactional
+    public Aluno atualizarAlunos(AlunoAtualizacaoDTO alunoAtualizacaoDTO) {
+        Aluno aluno = alunoRepository.findById(alunoAtualizacaoDTO.codigo_aluno())
+                .orElseThrow(() -> new RuntimeException("Aluno não encontrado."));
+
+        if (alunoAtualizacaoDTO.nome() != null) {
+            aluno.setNome(alunoAtualizacaoDTO.nome());
+        }
+
+        if (alunoAtualizacaoDTO.email() != null) {
+            aluno.setEmail(alunoAtualizacaoDTO.email());
+        }
+
+        if (alunoAtualizacaoDTO.senha() != null) {
+            aluno.setSenha_acesso(alunoAtualizacaoDTO.senha());
+        }
+
+        return alunoRepository.save(aluno);
+    }
+
+    @Transactional
+    public void deletarAlunos(Long id) {
+        if (!alunoRepository.existsById(id)) {
+            throw new RuntimeException("Aluno não encontrado.");
+        }
+
+        alunoRepository.deleteById(id);
     }
 }
