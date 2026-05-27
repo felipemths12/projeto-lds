@@ -4,6 +4,7 @@ public enum StatusCurso {
     ATIVO("ATIVO"),
     INATIVO("INATIVO"),
     CURSANDO("CURSANDO"),
+    TRANCADO("TRANCADO"),
     CONCLUIDO("CONCLUÍDO");
 
     private String statusCurso;
