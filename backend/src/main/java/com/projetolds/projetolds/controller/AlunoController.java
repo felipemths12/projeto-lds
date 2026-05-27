@@ -1,5 +1,6 @@
 package com.projetolds.projetolds.controller;
 
+import com.projetolds.projetolds.dto.aluno.AlunoAtualizacaoDTO;
 import com.projetolds.projetolds.dto.aluno.AlunoCadastroDTO;
 import com.projetolds.projetolds.dto.aluno.AlunoListagemDTO;
 import com.projetolds.projetolds.service.AlunoService;
@@ -28,5 +29,17 @@ public class AlunoController {
     public ResponseEntity<List<AlunoListagemDTO>> listarAlunos() {
         List<AlunoListagemDTO> alunos = alunoService.listarTodos();
         return ResponseEntity.ok(alunos);
+    }
+
+    @PutMapping
+    public ResponseEntity<Void> atualizarAlunos(@RequestBody AlunoAtualizacaoDTO alunoAtualizacaoDTO) {
+        alunoService.atualizarAlunos(alunoAtualizacaoDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("{/id}")
+    public ResponseEntity<Void> deletarAluno(@PathVariable Long id) {
+        alunoService.deletarAlunos(id);
+        return ResponseEntity.noContent().build();
     }
 }
