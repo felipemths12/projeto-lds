@@ -1,5 +1,6 @@
 package com.projetolds.projetolds.service;
 
+import com.projetolds.projetolds.dto.turma.TurmaAtualizacaoDTO;
 import com.projetolds.projetolds.dto.turma.TurmaCadastroDTO;
 import com.projetolds.projetolds.dto.turma.TurmaListagemDTO;
 import com.projetolds.projetolds.model.Curso;
@@ -11,6 +12,7 @@ import com.projetolds.projetolds.repository.FuncionarioRepository;
 import com.projetolds.projetolds.repository.TurmaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -52,5 +54,37 @@ public class TurmaService {
 
     public List<TurmaListagemDTO> listarTurmas() {
         return turmaRepository.findAll().stream().map(TurmaListagemDTO::new).toList();
+    }
+
+    @Transactional
+    public Turma atualizarTurma(TurmaAtualizacaoDTO turmaAtualizacaoDTO) {
+        Turma turma = turmaRepository.findById(turmaAtualizacaoDTO.codigo_turma())
+                .orElseThrow(() -> new RuntimeException("Turma não encontrada."));
+
+        if (turmaAtualizacaoDTO.numero_vagas() != null) {
+            turma.setNumero_vagas(turma.getNumero_vagas());
+        }
+
+        if (turmaAtualizacaoDTO.turno() != null) {
+            turma.setTurno(turmaAtualizacaoDTO.turno());
+        }
+
+        if (turmaAtualizacaoDTO.id_funcionario() != null) {
+            Funcionario novoProfessor = funcionarioRepository.findById(turmaAtualizacaoDTO.id_funcionario())
+                    .orElseThrow(() -> new RuntimeException("Professor não encontrado."));
+
+            if (novoProfessor.getPerfil_cargo() != Cargo.PROFESSOR) {
+                throw new RuntimeException("O funcionário selecionado não é um PROFESSOR");
+            }
+
+            turma.setProfessor(novoProfessor);
+        }
+
+        return turmaRepository.save(turma);
+    }
+
+    @Transactional
+    public void deletarTurma(Long id) {
+        turmaRepository.deleteById(id);
     }
 }
