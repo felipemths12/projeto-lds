@@ -20,6 +20,9 @@ public class AlunoService {
     @Autowired
     private AlunoRepository alunoRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Transactional
     public Aluno cadastrarAluno(AlunoCadastroDTO dto) {
         Aluno aluno = new Aluno();
@@ -27,7 +30,9 @@ public class AlunoService {
         aluno.setCPF(dto.cpf());
         aluno.setRG(dto.rg());
         aluno.setEmail(dto.email());
-        aluno.setSenha_acesso(dto.senha());
+        //Encriptação da senha
+        String encriptarSenha = passwordEncoder.encode(dto.senha());
+        aluno.setSenha_acesso(encriptarSenha);
 
         Endereco endereco = new Endereco();
         endereco.setLogradouro(dto.logradouro());
