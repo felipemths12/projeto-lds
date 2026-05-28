@@ -1,4 +1,5 @@
 package com.projetolds.projetolds.dto.login;
 
-public record TokenDTO() {
+public record TokenDTO(
+        String token) {
 }
