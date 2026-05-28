@@ -41,9 +41,9 @@ public class SecurityFilter extends OncePerRequestFilter {
     }
 
     private String recuperarToken(HttpServletRequest requisicao) {
-        var cabecalhoAutorizacao = requisicao.getHeader("Autorização");
+        var cabecalhoAutorizacao = requisicao.getHeader("Authorization");
         if (cabecalhoAutorizacao != null) {
-            return cabecalhoAutorizacao.replace("Bearer", "");
+            return cabecalhoAutorizacao.replace("Bearer ", "");
         }
         return null;
     }

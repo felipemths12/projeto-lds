@@ -37,7 +37,7 @@ public class AlunoController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("{/id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarAluno(@PathVariable Long id) {
         alunoService.deletarAlunos(id);
         return ResponseEntity.noContent().build();

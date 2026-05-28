@@ -31,7 +31,7 @@ public class TokenService {
                     .verify(token)
                     .getSubject();
         } catch (Exception e) {
-            return "Sessão expirada";
+            return "";
         }
     }
 }
