@@ -21,4 +21,17 @@ public class TokenService {
                 .withExpiresAt(LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00")))
                 .sign(algorithm);
     }
+
+    public String validacaoToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(senhaSecreta);
+            return JWT.require(algorithm)
+                    .withIssuer("Projeto LDS")
+                    .build()
+                    .verify(token)
+                    .getSubject();
+        } catch (Exception e) {
+            return "Sessão expirada";
+        }
+    }
 }
