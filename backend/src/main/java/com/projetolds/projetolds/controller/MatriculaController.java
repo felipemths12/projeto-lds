@@ -4,6 +4,7 @@ import com.projetolds.projetolds.dto.matricula.MatriculaAtualizacaoDTO;
 import com.projetolds.projetolds.dto.matricula.MatriculaCadastroDTO;
 import com.projetolds.projetolds.dto.matricula.MatriculaListagemDTO;
 import com.projetolds.projetolds.service.MatriculaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class MatriculaController {
     private MatriculaService matriculaService;
 
     @PostMapping
-    public ResponseEntity<Void> cadastrar(@RequestBody MatriculaCadastroDTO matriculaCadastroDTO) {
+    public ResponseEntity<Void> cadastrar(@RequestBody @Valid MatriculaCadastroDTO matriculaCadastroDTO) {
         matriculaService.matricular(matriculaCadastroDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -32,7 +33,7 @@ public class MatriculaController {
     }
 
     @PutMapping
-    public ResponseEntity<Void> atualizarMatriculas(@RequestBody MatriculaAtualizacaoDTO matriculaAtualizacaoDTO) {
+    public ResponseEntity<Void> atualizarMatriculas(@RequestBody @Valid MatriculaAtualizacaoDTO matriculaAtualizacaoDTO) {
         matriculaService.atualizarMatriculas(matriculaAtualizacaoDTO);
         return ResponseEntity.ok().build();
     }

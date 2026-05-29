@@ -4,6 +4,7 @@ import com.projetolds.projetolds.dto.aluno.AlunoAtualizacaoDTO;
 import com.projetolds.projetolds.dto.aluno.AlunoCadastroDTO;
 import com.projetolds.projetolds.dto.aluno.AlunoListagemDTO;
 import com.projetolds.projetolds.service.AlunoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class AlunoController {
     private AlunoService alunoService;
 
     @PostMapping
-    public ResponseEntity<Void> cadastrar(@RequestBody AlunoCadastroDTO dto) {
+    public ResponseEntity<Void> cadastrar(@RequestBody @Valid AlunoCadastroDTO dto) {
         alunoService.cadastrarAluno(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -32,7 +33,7 @@ public class AlunoController {
     }
 
     @PutMapping
-    public ResponseEntity<Void> atualizarAlunos(@RequestBody AlunoAtualizacaoDTO alunoAtualizacaoDTO) {
+    public ResponseEntity<Void> atualizarAlunos(@RequestBody @Valid AlunoAtualizacaoDTO alunoAtualizacaoDTO) {
         alunoService.atualizarAlunos(alunoAtualizacaoDTO);
         return ResponseEntity.ok().build();
     }
