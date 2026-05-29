@@ -1,42 +1,76 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, Lock, GraduationCap } from 'lucide-react';
+import { api } from '../services/api';
 import './Login.css';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log({ email, senha });
+    setLoading(true);
+    setError('');
+    
+    try {
+      const response = await api.post('/login', { email, senha });
+      if (response && response.token) {
+        localStorage.setItem('token', response.token);
+        navigate('/dashboard');
+      } else {
+        setError('Token inválido recebido.');
+      }
+    } catch (err) {
+      setError(err.message || 'Falha ao realizar login. Verifique suas credenciais.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="login-container">
+    <div className="login-page">
       <div className="login-card">
         <div className="logo-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-            <path d="M6 12v5c3 3 9 3 12 0v-5"/>
-          </svg>
+          <GraduationCap size={28} />
         </div>
         <h2>Sistema Escolar</h2>
         <p className="subtitle">Faça login para continuar</p>
+        
+        {error && <div className="error-message" style={{ color: 'red', fontSize: '13px', marginBottom: '16px' }}>{error}</div>}
+        
         <form onSubmit={handleLogin}>
           <div className="input-group">
             <label>Email</label>
             <div className="input-wrapper">
-              <svg className="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-              <input type="email" placeholder="seu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <Mail className="input-icon" size={18} />
+              <input 
+                type="email" 
+                placeholder="seu@email.com" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                required 
+              />
             </div>
           </div>
+          
           <div className="input-group">
             <label>Senha</label>
             <div className="input-wrapper">
-              <svg className="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-              <input type="password" placeholder="•••••••" value={senha} onChange={(e) => setSenha(e.target.value)} required />
+              <Lock className="input-icon" size={18} />
+              <input 
+                type="password" 
+                placeholder="••••••••" 
+                value={senha} 
+                onChange={(e) => setSenha(e.target.value)} 
+                required 
+              />
             </div>
           </div>
+          
           <div className="options-group">
             <label className="checkbox-container">
               <input type="checkbox" />
@@ -44,9 +78,13 @@ export default function Login() {
             </label>
             <a href="#" className="forgot-password">Esqueceu a senha?</a>
           </div>
-          <button type="submit" className="btn-entrar">Entrar</button>
+          
+          <button type="submit" className="btn-primary" disabled={loading}>
+            {loading ? 'Entrando...' : 'Entrar'}
+          </button>
         </form>
-        <div className="login-footer">
+        
+        <div className="auth-footer">
           Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link>
         </div>
       </div>

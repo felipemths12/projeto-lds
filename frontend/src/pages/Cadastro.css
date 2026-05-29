@@ -1,112 +1,186 @@
-.cadastro-container {
+.cadastro-page {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 65px);
+  min-height: 100vh;
+  background-color: var(--auth-bg-color);
+  background-image: linear-gradient(135deg, #fce7f3 0%, #ede9fe 100%);
   padding: 40px 20px;
-  box-sizing: border-box;
 }
+
 .cadastro-card {
-  background-color: #ffffff;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.05);
+  background-color: var(--white);
+  padding: 48px 40px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
   width: 100%;
-  max-width: 600px;
+  max-width: 560px;
   text-align: center;
+  position: relative;
+  animation: fadeIn 0.4s ease-out;
 }
+
+.back-link {
+  position: absolute;
+  top: 32px;
+  left: 32px;
+  display: flex;
+  align-items: center;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: var(--primary-color);
+}
+
+.back-link svg {
+  margin-right: 6px;
+}
+
 .logo-icon {
-  background-color: #5b4ee4;
-  width: 48px;
-  height: 48px;
+  background-color: var(--primary-color);
+  color: var(--white);
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 auto 16px;
+  margin: 0 auto 20px;
+  box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
 }
+
 .cadastro-card h2 {
   margin: 0;
-  font-size: 22px;
-  color: #1a1a1a;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
 }
+
 .subtitle {
-  color: #666;
+  color: var(--text-muted);
   font-size: 14px;
-  margin-top: 5px;
-  margin-bottom: 30px;
+  margin-top: 8px;
+  margin-bottom: 32px;
 }
+
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 15px;
+  gap: 20px;
   text-align: left;
-  margin-bottom: 25px;
+  margin-bottom: 24px;
 }
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
 .input-group label {
-  display: block;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  color: #333;
+  color: var(--text-dark);
   margin-bottom: 8px;
 }
+
 .input-wrapper {
   display: flex;
   align-items: center;
-  border: 1px solid #dcdcdc;
-  border-radius: 6px;
-  padding: 0 12px;
-  background-color: #fff;
-  transition: border-color 0.3s;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0 14px;
+  background-color: var(--white);
+  transition: all 0.2s ease;
 }
+
 .input-wrapper:focus-within {
-  border-color: #5b4ee4;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
 }
-.input-wrapper input {
+
+.input-icon {
+  color: var(--text-muted);
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.input-wrapper input,
+.input-wrapper select {
   flex: 1;
   border: none;
-  padding: 10px 0;
+  padding: 12px 0;
   outline: none;
   font-size: 14px;
-  color: #333;
+  color: var(--text-dark);
   background: transparent;
-}
-.input-wrapper input::placeholder {
-  color: #aaa;
-}
-.full-width {
-  grid-column: span 2;
-}
-.btn-cadastrar {
   width: 100%;
-  background-color: #5b4ee4;
-  color: white;
+}
+
+.input-wrapper select {
+  cursor: pointer;
+  appearance: none;
+}
+
+.input-wrapper input::placeholder {
+  color: #94a3b8;
+}
+
+.terms-group {
+  text-align: left;
+  margin-bottom: 28px;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.checkbox-container input {
+  margin-right: 10px;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary-color);
+  cursor: pointer;
+}
+
+.terms-link {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.btn-primary {
+  width: 100%;
+  background-color: var(--primary-color);
+  color: var(--white);
   border: none;
-  border-radius: 6px;
-  padding: 12px;
-  font-size: 16px;
+  border-radius: var(--radius-md);
+  padding: 14px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(124, 58, 237, 0.2);
 }
-.btn-cadastrar:hover {
-  background-color: #4a3dcf;
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+  box-shadow: 0 4px 8px rgba(124, 58, 237, 0.3);
+  transform: translateY(-1px);
 }
-.cadastro-footer {
-  margin-top: 24px;
-  font-size: 13px;
-  color: #666;
-}
-.cadastro-footer a {
-  color: #5b4ee4;
-  text-decoration: none;
-  font-weight: 600;
-}
-@media (max-width: 600px) {
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-  .full-width {
-    grid-column: span 1;
-  }
+
+.btn-primary:active {
+  transform: translateY(0);
 }
