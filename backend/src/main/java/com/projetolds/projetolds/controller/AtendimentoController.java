@@ -3,6 +3,7 @@ package com.projetolds.projetolds.controller;
 import com.projetolds.projetolds.dto.atendimento.AtendimentoCadastroDTO;
 import com.projetolds.projetolds.dto.atendimento.AtendimentoListagemDTO;
 import com.projetolds.projetolds.service.AtendimentoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class AtendimentoController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> abrirAtendimentos (@RequestBody AtendimentoCadastroDTO atendimentoCadastroDTO) {
+    public ResponseEntity<Void> abrirAtendimentos (@RequestBody @Valid AtendimentoCadastroDTO atendimentoCadastroDTO) {
         atendimentoService.abrirAtendimento(atendimentoCadastroDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
