@@ -1,5 +1,6 @@
 package com.projetolds.projetolds.config;
 
+import com.projetolds.projetolds.dto.config.DadosErroValidacao;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
