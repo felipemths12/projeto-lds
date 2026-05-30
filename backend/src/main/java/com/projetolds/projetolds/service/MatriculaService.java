@@ -54,6 +54,11 @@ public class MatriculaService {
             throw new RuntimeException("Matrícula negada: Sem vagas disponíveis.");
         }
 
+        Long matriculasAtivas = matriculaRepository.countByTurmaAndStatusMatricula(turma, "ATIVO");
+        if(matriculasAtivas >= turma.getNumero_vagas()) {
+            throw new IllegalArgumentException("A turma já atingiu a capacidade máxima de vagas.");
+        }
+
         Matricula matricula = new Matricula();
 
         matricula.setAluno(aluno);
