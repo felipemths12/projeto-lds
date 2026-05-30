@@ -3,6 +3,7 @@ package com.projetolds.projetolds.security;
 import com.projetolds.projetolds.security.service.SecurityFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,6 +29,15 @@ public class SecurityConfig {
                         "/v3/api-docs/**",
                         "/swagger-ui/**",
                         "/swagger-ui.html").permitAll()
+
+                        .requestMatchers("/funcionarios").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST,"/cursos", "/turmas", "/matriculas").hasAnyRole("ADMIN", "ATENDENTE")
+                        .requestMatchers(HttpMethod.PUT, "/cursos", "/turmas", "/matriculas", "/alunos").hasAnyRole("ADMIN", "ATENDENTE")
+                        .requestMatchers(HttpMethod.DELETE, "/cursos", "/turmas", "/matriculas", "/alunos").hasAnyRole("ADMIN", "ATENDENTE")
+
+                        .requestMatchers(HttpMethod.GET, "/cursos").hasAnyRole("ADMIN", "ATENDENTE", "PROFESSOR", "ALUNO")
+                        .requestMatchers(HttpMethod.GET, "/turmas").hasAnyRole("ADMIN", "ATENDENTE", "PROFESSOR", "ALUNO")
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
 
