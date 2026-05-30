@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.projetolds.projetolds.model.Aluno;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,11 +16,11 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String senhaSecreta;
 
-    public String geradorDeToken(Aluno aluno) {
+    public String geradorDeToken(UserDetails usuario) {
         Algorithm algorithm = Algorithm.HMAC256(senhaSecreta);
         return JWT.create()
                 .withIssuer("Projeto LDS")
-                .withSubject(aluno.getEmail())
+                .withSubject(usuario.getUsername())
                 .withExpiresAt(LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00")))
                 .sign(algorithm);
     }

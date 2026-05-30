@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,8 +28,8 @@ public class AutenticacaoController {
 
         var autenticacao = manager.authenticate(tokenAutenticacao);
 
-        Aluno alunoLogado = (Aluno) autenticacao.getPrincipal();
-        String tokenJWT = tokenService.geradorDeToken(alunoLogado);
+        var usuarioLogado = (UserDetails) autenticacao.getPrincipal();
+        String tokenJWT = tokenService.geradorDeToken(usuarioLogado);
 
         return ResponseEntity.ok(new TokenDTO(tokenJWT));
     }
