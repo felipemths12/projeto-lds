@@ -4,6 +4,7 @@ import com.projetolds.projetolds.dto.curso.CursoAtualizacaoDTO;
 import com.projetolds.projetolds.dto.curso.CursoCadastroDTO;
 import com.projetolds.projetolds.dto.curso.CursoListagemDTO;
 import com.projetolds.projetolds.service.CursoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class CursoController {
     private CursoService cursoService;
 
     @PostMapping
-    public ResponseEntity<Void> cadastrar(@RequestBody CursoCadastroDTO dto) {
+    public ResponseEntity<Void> cadastrar(@RequestBody @Valid CursoCadastroDTO dto) {
         cursoService.cadastrarCurso(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -32,7 +33,7 @@ public class CursoController {
     }
 
     @PutMapping
-    public ResponseEntity<Void> atualizarCurso(@RequestBody CursoAtualizacaoDTO cursoAtualizacaoDTO) {
+    public ResponseEntity<Void> atualizarCurso(@RequestBody @Valid CursoAtualizacaoDTO cursoAtualizacaoDTO) {
         cursoService.atualizarCurso(cursoAtualizacaoDTO);
         return ResponseEntity.ok().build();
     }

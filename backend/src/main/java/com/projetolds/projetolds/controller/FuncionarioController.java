@@ -4,6 +4,7 @@ import com.projetolds.projetolds.dto.funcionario.FuncionarioAtualizacaoDTO;
 import com.projetolds.projetolds.dto.funcionario.FuncionarioCadastroDTO;
 import com.projetolds.projetolds.dto.funcionario.FuncionarioListagemDTO;
 import com.projetolds.projetolds.service.FuncionarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class FuncionarioController {
     private FuncionarioService funcionarioService;
 
     @PostMapping
-    public ResponseEntity<Void> cadastrarFuncionario(@RequestBody FuncionarioCadastroDTO funcionarioCadastroDTO) {
+    public ResponseEntity<Void> cadastrarFuncionario(@RequestBody @Valid FuncionarioCadastroDTO funcionarioCadastroDTO) {
         funcionarioService.cadastrarFuncionario(funcionarioCadastroDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -32,7 +33,7 @@ public class FuncionarioController {
     }
 
     @PutMapping
-    public ResponseEntity<Void> atualizarFuncionarios(@RequestBody FuncionarioAtualizacaoDTO funcionarioAtualizacaoDTO) {
+    public ResponseEntity<Void> atualizarFuncionarios(@RequestBody @Valid FuncionarioAtualizacaoDTO funcionarioAtualizacaoDTO) {
         funcionarioService.atualizarFuncionario(funcionarioAtualizacaoDTO);
         return ResponseEntity.ok().build();
     }

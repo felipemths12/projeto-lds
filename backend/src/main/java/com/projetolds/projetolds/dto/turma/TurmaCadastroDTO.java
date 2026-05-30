@@ -1,9 +1,28 @@
 package com.projetolds.projetolds.dto.turma;
 
-public record TurmaCadastroDTO (Integer semestre,
-                                Integer ano,
-                                String turno,
-                                Integer numero_vagas,
-                                Long codigo_curso,
-                                Long id_funcionario){
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+
+public record TurmaCadastroDTO (
+
+        @NotNull
+        @Positive
+        Integer semestre,
+
+        @NotNull
+        Integer ano,
+
+        @NotBlank
+        String turno,
+
+        @NotNull
+        Integer numero_vagas,
+
+        @NotNull
+        Long codigo_curso,
+
+        @NotNull
+        Long id_funcionario){
 }

@@ -1,5 +1,12 @@
 package com.projetolds.projetolds.dto.matricula;
 
-public record MatriculaCadastroDTO(Long codigo_aluno,
-                                   Long codigo_turma) {
+import jakarta.validation.constraints.NotNull;
+
+public record MatriculaCadastroDTO(
+
+        @NotNull
+        Long codigo_aluno,
+
+        @NotNull
+        Long codigo_turma) {
 }

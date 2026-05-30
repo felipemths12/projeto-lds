@@ -4,6 +4,7 @@ import com.projetolds.projetolds.dto.turma.TurmaAtualizacaoDTO;
 import com.projetolds.projetolds.dto.turma.TurmaCadastroDTO;
 import com.projetolds.projetolds.dto.turma.TurmaListagemDTO;
 import com.projetolds.projetolds.service.TurmaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class TurmaController {
     private TurmaService turmaService;
 
     @PostMapping
-    public ResponseEntity<Void> cadastrarTurma(@RequestBody TurmaCadastroDTO turmaCadastroDTO) {
+    public ResponseEntity<Void> cadastrarTurma(@RequestBody @Valid TurmaCadastroDTO turmaCadastroDTO) {
         turmaService.cadastrarTurma(turmaCadastroDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -32,7 +33,7 @@ public class TurmaController {
     }
 
     @PutMapping
-    public ResponseEntity<Void> atualizarTurmas(@RequestBody TurmaAtualizacaoDTO turmaAtualizacaoDTO) {
+    public ResponseEntity<Void> atualizarTurmas(@RequestBody @Valid TurmaAtualizacaoDTO turmaAtualizacaoDTO) {
         turmaService.atualizarTurma(turmaAtualizacaoDTO);
         return ResponseEntity.ok().build();
     }

@@ -3,6 +3,7 @@ package com.projetolds.projetolds.security.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.projetolds.projetolds.model.Aluno;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -11,7 +12,8 @@ import java.time.ZoneOffset;
 @Service
 public class TokenService {
 
-    private String senhaSecreta = "12345678";
+    @Value("${api.security.token.secret}")
+    private String senhaSecreta;
 
     public String geradorDeToken(Aluno aluno) {
         Algorithm algorithm = Algorithm.HMAC256(senhaSecreta);
