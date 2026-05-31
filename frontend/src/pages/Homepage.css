@@ -10,3 +10,25 @@
 .teste {
     color: black;
 }
+
+@media (max-width: 768px) {
+  .homepage-container {
+    padding: 15px;
+  }
+  .hero-section {
+    flex-direction: column;
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .hero-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  .hero-buttons button {
+    width: 100%;
+  }
+}

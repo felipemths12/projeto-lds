@@ -1,0 +1,262 @@
+.alunos-container {
+  padding: 30px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+.alunos-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.alunos-title h1 {
+  font-size: 26px;
+  color: #1e293b;
+  margin: 0 0 5px 0;
+  font-weight: 700;
+}
+
+.alunos-title p {
+  color: #64748b;
+  margin: 0;
+  font-size: 14px;
+}
+
+.btn-novo-aluno {
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.btn-novo-aluno:hover {
+  background-color: #4338ca;
+}
+
+.alunos-filters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.search-wrapper {
+  position: relative;
+  flex: 1;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 12px 12px 42px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  background-color: white;
+}
+
+.status-select {
+  padding: 12px 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #334155;
+  outline: none;
+  background-color: white;
+  cursor: pointer;
+}
+
+.table-wrapper {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.alunos-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.alunos-table th {
+  background-color: #f8fafc;
+  padding: 16px 20px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.alunos-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 14px;
+  color: #334155;
+  vertical-align: middle;
+}
+
+.alunos-table tr:last-child td {
+  border-bottom: none;
+}
+
+.aluno-info-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.aluno-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #e0e7ff;
+  color: #4f46e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aluno-name-email {
+  display: flex;
+  flex-direction: column;
+}
+
+.aluno-name {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.aluno-email {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.status-ativo {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.status-inativo {
+  background-color: #f1f5f9;
+  color: #64748b;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-icon-action {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: #64748b;
+  transition: color 0.2s;
+}
+
+.btn-edit:hover { color: #3b82f6; }
+.btn-delete:hover { color: #ef4444; }
+
+.pagination-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5px;
+}
+
+.pagination-info {
+  font-size: 14px;
+  color: #64748b;
+}
+
+.pagination-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn-pagination-nav {
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #334155;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-pagination-nav:hover {
+  background-color: #f8fafc;
+}
+
+.page-number {
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .alunos-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  .btn-novo-aluno {
+    width: 100%;
+    justify-content: center;
+  }
+  .alunos-filters {
+    flex-direction: column;
+  }
+  .search-wrapper, .status-select {
+    width: 100%;
+  }
+  .table-wrapper {
+    overflow-x: auto;
+  }
+  .pagination-wrapper {
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+  }
+}

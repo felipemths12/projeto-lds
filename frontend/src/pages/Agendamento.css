@@ -1,0 +1,198 @@
+.agendamento-container {
+  padding: 30px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.agendamento-header h1 {
+  font-size: 24px;
+  color: #1e293b;
+  margin: 0 0 5px 0;
+}
+
+.agendamento-header p {
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 25px;
+}
+
+.agendamento-card, .agendamentos-list-container {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 25px;
+  border: 1px solid #e2e8f0;
+}
+
+.agendamento-card h3, .agendamentos-list-container h3 {
+  font-size: 16px;
+  color: #1e293b;
+  margin: 0 0 20px 0;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 8px;
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-icon.align-top {
+  align-items: flex-start;
+}
+
+.input-with-icon svg {
+  position: absolute;
+  left: 12px;
+}
+
+.input-with-icon.align-top svg {
+  top: 12px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 12px 12px 40px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1e293b;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+}
+
+.form-input:focus {
+  border-color: #0f766e;
+}
+
+.horarios-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.btn-horario {
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: white;
+  color: #475569;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-horario:hover, .btn-horario:focus {
+  border-color: #0f766e;
+  color: #0f766e;
+  background-color: #f0fdfa;
+}
+
+.btn-agendar {
+  background: #0f766e;
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.agendamento-item {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 15px;
+}
+
+.agendamento-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.agendamento-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #0f766e;
+}
+
+.agendamento-data, .agendamento-hora {
+  color: #1e293b;
+}
+
+.badge-confirmado { background-color: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+.badge-pendente { background-color: #fef08a; color: #854d0e; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+
+.agendamento-prof {
+  color: #64748b;
+  font-size: 14px;
+  margin: 0 0 15px 0;
+}
+
+.agendamento-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.btn-reagendar, .btn-cancelar-ag {
+  padding: 10px;
+  background: white;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-reagendar {
+  border: 1px solid #cbd5e1;
+  color: #475569;
+}
+
+.btn-cancelar-ag {
+  border: 1px solid #fca5a5;
+  color: #ef4444;
+}
+
+.dicas-box {
+  background-color: #0d9488;
+  color: white;
+  padding: 25px;
+  border-radius: 12px;
+}
+
+.dicas-box h4 {
+  margin: 0 0 15px 0;
+  font-size: 16px;
+}
+
+.dicas-box ul {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .horarios-grid { grid-template-columns: repeat(2, 1fr); }
+  .agendamento-actions { grid-template-columns: 1fr; }
+}
