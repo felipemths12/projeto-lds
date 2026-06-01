@@ -1,7 +1,36 @@
 import axios from 'axios';
 
+// Cliente HTTP simples centralizado para evitar repetição de configuração.
 const api = axios.create({
-    baseURL: 'http://localhost:8080'
+  baseURL: 'http://localhost:8080'
 });
 
-export default api; // Adjust the base URL as needed
+// Interceptor de requisição: injeta o JWT automaticamente em todas as chamadas.
+// Fazemos isso para não repetir a lógica de header em cada tela.
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers = config.headers || {};
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Interceptor de resposta: se o token expirar ou for inválido, limpamos a sessão.
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const status = error?.response?.status;
+    if (status === 401) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default api;

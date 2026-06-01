@@ -1,20 +1,36 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Cadastro.css';
+import api from '../services/api';
 
 export default function Cadastro() {
   const [formData, setFormData] = useState({
     nome: '', cpf: '', rg: '', email: '', senha: '', telefone: '', logradouro: '', cep: ''
   });
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevState => ({ ...prevState, [name]: value }));
   };
 
-  const handleCadastro = (e) => {
+  const handleCadastro = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    setLoading(true);
+    try {
+      const payload = {
+        ...formData,
+        cpf: formData.cpf.replace(/\D/g, '')
+      };
+      await api.post('/alunos', payload);
+      alert('Cadastro realizado com sucesso! Você já pode fazer login.');
+      navigate('/login');
+    } catch (error) {
+      alert(error.response?.data?.message || 'Erro ao realizar o cadastro. Verifique os dados e tente novamente.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

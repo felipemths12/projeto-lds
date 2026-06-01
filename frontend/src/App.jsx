@@ -1,5 +1,6 @@
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
 import NavBar from './components/NavBar';
+import PrivateRoute from './components/PrivateRoute.jsx';
 import Homepage from './pages/Homepage.jsx';
 import Login from './pages/Login.jsx';
 import Cadastro from './pages/Cadastro.jsx';
@@ -10,24 +11,37 @@ import FormularioCurso from './pages/FormularioCurso.jsx';
 import Matricula from './pages/Matricula.jsx';
 import Agendamento from './pages/Agendamento.jsx';
 import Mensagens from './pages/Mensagens.jsx';
+import Turmas from './pages/Turmas.jsx';
+import Funcionarios from './pages/Funcionarios.jsx';
 
 export default function App() {
   return (
     <BrowserRouter>
       <NavBar />
       <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/alunos" element={<Alunos />} />
-        <Route path="/cursos" element={<Cursos />} />
-        <Route path="/formulario-curso" element={<FormularioCurso />} />
-        <Route path="/matricula" element={<Matricula />} />
-        <Route path="/agendamento" element={<Agendamento />} />
-        <Route path="/mensagens" element={<Mensagens />} />
+        {/* A tela inicial precisa ser a Homepage, como pedido. */}
+        <Route path="/" element={<Homepage />} />
         <Route path="/home" element={<Homepage />} />
+
+        {/* Rotas públicas */}
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
+        <Route path="/cursos" element={<Cursos />} />
+
+        {/* Rotas protegidas */}
+        <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+        <Route path="/alunos" element={<PrivateRoute><Alunos /></PrivateRoute>} />
+        <Route path="/formulario-curso" element={<PrivateRoute><FormularioCurso /></PrivateRoute>} />
+        <Route path="/matricula" element={<PrivateRoute><Matricula /></PrivateRoute>} />
+        <Route path="/turmas" element={<PrivateRoute><Turmas /></PrivateRoute>} />
+        <Route path="/funcionarios" element={<PrivateRoute><Funcionarios /></PrivateRoute>} />
+        <Route path="/agendamento" element={<PrivateRoute><Agendamento /></PrivateRoute>} />
+        <Route path="/mensagens" element={<PrivateRoute><Mensagens /></PrivateRoute>} />
+
+        {/* Qualquer rota desconhecida volta para a homepage */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      
+
       <Link to="/mensagens" style={{
         position: 'fixed', bottom: '30px', right: '30px', backgroundColor: '#4f46e5',
         color: 'white', border: 'none', borderRadius: '50%', width: '60px', height: '60px',

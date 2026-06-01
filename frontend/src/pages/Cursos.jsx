@@ -1,17 +1,45 @@
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Cursos.css';
+import api from '../services/api';
+import { AuthContext } from '../contexts/AuthContext.jsx';
 
 export default function Cursos() {
   const navigate = useNavigate();
+  const { usuario } = useContext(AuthContext);
+  const [cursos, setCursos] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [erro, setErro] = useState('');
 
-  const listaCursos = [
-    { id: 1, nome: "Ensino Fundamental I", valor: "850,00", turnos: ["Manhã", "Tarde"], vagasOcupadas: 98, vagasTotal: 120, status: "Ativo" },
-    { id: 2, nome: "Ensino Fundamental II", valor: "950,00", turnos: ["Manhã"], vagasOcupadas: 100, vagasTotal: 100, status: "Ativo" },
-    { id: 3, nome: "Ensino Médio", valor: "1.200,00", turnos: ["Manhã", "Tarde"], vagasOcupadas: 75, vagasTotal: 80, status: "Ativo" },
-    { id: 4, nome: "Bilingue - Kids", valor: "600,00", turnos: ["Tarde"], vagasOcupadas: 30, vagasTotal: 50, status: "Ativo" },
-    { id: 5, nome: "Robótica Aplicada", valor: "450,00", turnos: ["Tarde", "Noite"], vagasOcupadas: 45, vagasTotal: 60, status: "Ativo" },
-    { id: 6, nome: "Pré-Vestibular", valor: "1.500,00", turnos: ["Manhã", "Noite"], vagasOcupadas: 110, vagasTotal: 150, status: "Ativo" }
-  ];
+  useEffect(() => {
+    async function carregarCursos() {
+      setLoading(true);
+      setErro('');
+      try {
+        const resposta = await api.get('/cursos');
+        setCursos(resposta.data || []);
+      } catch (error) {
+        setErro('Não foi possível carregar os cursos.');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    carregarCursos();
+  }, []);
+
+  const podeCriar = usuario && usuario.tipo === 'FUNCIONARIO' && ['ADMIN', 'ATENDENTE'].includes(usuario.cargo);
+
+  function podeEditarCurso(curso) {
+    if (!usuario || usuario.tipo !== 'FUNCIONARIO') return false;
+    if (['ADMIN', 'ATENDENTE'].includes(usuario.cargo)) return true;
+    if (usuario.cargo === 'PROFESSOR') {
+      const userCpf = usuario.dados?.cpf || usuario.dados?.CPF;
+      const cpfsProfessores = curso.cpfs_professores || [];
+      return cpfsProfessores.includes(userCpf);
+    }
+    return false;
+  }
 
   return (
     <div className="cursos-container">
@@ -20,12 +48,13 @@ export default function Cursos() {
           <h1>Cursos e Turmas</h1>
           <p>Gerencie as modalidades de ensino da instituição</p>
         </div>
-        
-        {/* BOTÃO CONECTADO: NOVO CURSO */}
-        <button className="btn-novo-curso" onClick={() => navigate('/formulario-curso')}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-          Novo Curso
-        </button>
+
+        {podeCriar && (
+          <button className="btn-novo-curso" onClick={() => navigate('/formulario-curso')}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Novo Curso
+          </button>
+        )}
       </div>
 
       <div className="cursos-filters">
@@ -35,49 +64,39 @@ export default function Cursos() {
         </div>
       </div>
 
+      {loading && <div style={{ padding: '20px' }}>Carregando cursos...</div>}
+      {erro && <div style={{ padding: '20px', color: 'crimson' }}>{erro}</div>}
+
       <div className="cursos-grid">
-        {listaCursos.map(curso => {
-          const porcentagem = (curso.vagasOcupadas / curso.vagasTotal) * 100;
-          
-          return (
-            <div className="curso-card" key={curso.id}>
-              <div className="curso-card-header">
-                <div>
-                  <h3 className="curso-nome">{curso.nome}</h3>
-                  <span className="curso-mensalidade">R$ <strong>{curso.valor}</strong> /mês</span>
-                </div>
-                <span className="curso-status">{curso.status}</span>
+        {cursos.map((curso) => (
+          <div className="curso-card" key={curso.codigo_curso}>
+            <div className="curso-card-header">
+              <div>
+                <h3 className="curso-nome">{curso.nome}</h3>
+                <span className="curso-mensalidade">Carga horária: <strong>{curso.carga_horaria}</strong></span>
               </div>
+              <span className="curso-status">{curso.status || 'ATIVO'}</span>
+            </div>
 
-              <div className="curso-turnos">
-                {curso.turnos.map((turno, index) => (
-                  <span className="turno-badge" key={index}>{turno}</span>
-                ))}
+            <div className="curso-vagas-info">
+              <div className="vagas-text">
+                <span>Código</span>
+                <span>{curso.codigo_curso}</span>
               </div>
+            </div>
 
-              <div className="curso-vagas-info">
-                <div className="vagas-text">
-                  <span>Ocupação</span>
-                  <span>{curso.vagasOcupadas}/{curso.vagasTotal} vagas</span>
-                </div>
-                <div className="progress-bar-bg">
-                  <div className="progress-bar-fill" style={{ width: `${porcentagem}%` }}></div>
-                </div>
-              </div>
-
+            {podeEditarCurso(curso) && (
               <div className="curso-card-actions">
-                {/* BOTÃO CONECTADO: EDITAR */}
                 <button className="btn-card-action" onClick={() => navigate('/formulario-curso')}>
                   Editar
                 </button>
-                
                 <button className="btn-card-action btn-matricular" onClick={() => navigate('/matricula')}>
                   Matricular
                 </button>
               </div>
-            </div>
-          );
-        })}
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );
