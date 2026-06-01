@@ -33,5 +33,5 @@ public class Matricula {
     private LocalDateTime data_realizacao;
 
     @Enumerated(EnumType.STRING)
-    private StatusGeral status_matricula;
+    private StatusGeral statusMatricula;
 }

@@ -64,7 +64,7 @@ public class MatriculaService {
         matricula.setAluno(aluno);
         matricula.setTurma(turma);
         matricula.setData_realizacao(LocalDateTime.now());
-        matricula.setStatus_matricula(StatusGeral.ATIVO);
+        matricula.setStatusMatricula(StatusGeral.ATIVO);
 
         Matricula salvarMatricula = matriculaRepository.save(matricula);
 
@@ -109,7 +109,7 @@ public class MatriculaService {
         //Mudança de status
         if (matriculaAtualizacaoDTO.status_matricula() != null) {
             StatusGeral novoStatus = StatusGeral.valueOf(matriculaAtualizacaoDTO.status_matricula().toUpperCase());
-            StatusGeral statusAntigo = matricula.getStatus_matricula();
+            StatusGeral statusAntigo = matricula.getStatusMatricula();
 
             if (statusAntigo == StatusGeral.ATIVO && novoStatus != StatusGeral.ATIVO) {
                 Turma turmaAtual = matricula.getTurma();
@@ -123,7 +123,7 @@ public class MatriculaService {
                 turmaAtual.setNumero_vagas(turmaAtual.getNumero_vagas() - 1);
                 turmaRepository.save(turmaAtual);
             }
-            matricula.setStatus_matricula(novoStatus);
+            matricula.setStatusMatricula(novoStatus);
         }
 
         //Mudança de turma
@@ -135,7 +135,7 @@ public class MatriculaService {
                 throw new RuntimeException("A nova turma selecionada não possui vagas disponíveis.");
             }
 
-            if(matricula.getStatus_matricula() == StatusGeral.ATIVO) {
+            if(matricula.getStatusMatricula() == StatusGeral.ATIVO) {
                 Turma turmaAntiga = matricula.getTurma();
                 turmaAntiga.setNumero_vagas(turmaAntiga.getNumero_vagas() + 1);
                 turmaRepository.save(turmaAntiga);
@@ -155,8 +155,8 @@ public class MatriculaService {
         Matricula matricula = matriculaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Matrícula não encontrada."));
 
-        if (matricula.getStatus_matricula() == StatusGeral.ATIVO) {
-            matricula.setStatus_matricula(StatusGeral.INATIVO);
+        if (matricula.getStatusMatricula() == StatusGeral.ATIVO) {
+            matricula.setStatusMatricula(StatusGeral.INATIVO);
 
             Turma turma = matricula.getTurma();
             turma.setNumero_vagas(turma.getNumero_vagas() + 1);

@@ -9,6 +9,6 @@ public record MatriculaListagemDTO(Long numero_matricula,
                                    Long codigo_turma) {
 
     public MatriculaListagemDTO (Matricula m) {
-        this(m.getNumero_matricula(), m.getStatus_matricula().name(), m.getAluno().getCodigo_aluno(), m.getAluno().getNome(), m.getTurma().getCodigo_turma());
+        this(m.getNumero_matricula(), m.getStatusMatricula().name(), m.getAluno().getCodigo_aluno(), m.getAluno().getNome(), m.getTurma().getCodigo_turma());
     }
 }
