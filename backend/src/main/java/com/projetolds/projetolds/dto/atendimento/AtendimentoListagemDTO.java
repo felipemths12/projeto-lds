@@ -13,6 +13,8 @@ public record AtendimentoListagemDTO(Long numero_protocolo,
 
     public AtendimentoListagemDTO (Atendimento atendimento) {
         this(atendimento.getNumero_protocolo(), atendimento.getAssunto(), atendimento.getDataHora_agendamento(),
-                atendimento.getStatus_atendimento().name(), atendimento.getAluno().getNome(), atendimento.getFuncionario().getNome());
+                atendimento.getStatus_atendimento() != null ? atendimento.getStatus_atendimento().name() : null,
+                atendimento.getAluno() != null ? atendimento.getAluno().getNome() : null,
+                atendimento.getFuncionario() != null ? atendimento.getFuncionario().getNome() : null);
     }
 }

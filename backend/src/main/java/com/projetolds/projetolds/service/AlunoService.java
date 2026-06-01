@@ -72,8 +72,9 @@ public class AlunoService {
             aluno.setEmail(alunoAtualizacaoDTO.email());
         }
 
-        if (alunoAtualizacaoDTO.senha() != null) {
-            aluno.setSenha_acesso(alunoAtualizacaoDTO.senha());
+        if (alunoAtualizacaoDTO.senha() != null && !alunoAtualizacaoDTO.senha().isEmpty()) {
+            String senhaEncriptada = passwordEncoder.encode(alunoAtualizacaoDTO.senha());
+            aluno.setSenha_acesso(senhaEncriptada);
         }
 
         return alunoRepository.save(aluno);

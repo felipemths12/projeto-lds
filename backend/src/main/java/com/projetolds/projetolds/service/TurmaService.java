@@ -16,6 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import com.projetolds.projetolds.repository.AlunoRepository;
+import com.projetolds.projetolds.model.Aluno;
+
 @Service
 public class TurmaService {
 
@@ -27,6 +33,9 @@ public class TurmaService {
 
     @Autowired
     private FuncionarioRepository funcionarioRepository;
+
+    @Autowired
+    private AlunoRepository alunoRepository;
 
     public Turma cadastrarTurma(TurmaCadastroDTO turmaCadastroDTO) {
         Curso curso = cursoRepository.findById(turmaCadastroDTO.codigo_curso())
@@ -52,7 +61,18 @@ public class TurmaService {
 
     }
 
+    @Transactional
     public List<TurmaListagemDTO> listarTurmas() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ALUNO"))) {
+            Aluno aluno = (Aluno) alunoRepository.findByEmail(auth.getName());
+            return aluno.getMatriculas().stream()
+                    .filter(m -> m.getStatusMatricula() == com.projetolds.projetolds.model.enums.StatusGeral.ATIVO)
+                    .map(com.projetolds.projetolds.model.Matricula::getTurma)
+                    .distinct()
+                    .map(TurmaListagemDTO::new)
+                    .toList();
+        }
         return turmaRepository.findAll().stream().map(TurmaListagemDTO::new).toList();
     }
 
@@ -61,8 +81,16 @@ public class TurmaService {
         Turma turma = turmaRepository.findById(turmaAtualizacaoDTO.codigo_turma())
                 .orElseThrow(() -> new RuntimeException("Turma não encontrada."));
 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_PROFESSOR"))) {
+            String professorCpf = auth.getName();
+            if (!turma.getProfessor().getCPF().equals(professorCpf)) {
+                throw new RuntimeException("Acesso negado: Você só pode editar turmas às quais está associado.");
+            }
+        }
+
         if (turmaAtualizacaoDTO.numero_vagas() != null) {
-            turma.setNumero_vagas(turma.getNumero_vagas());
+            turma.setNumero_vagas(turmaAtualizacaoDTO.numero_vagas());
         }
 
         if (turmaAtualizacaoDTO.turno() != null) {

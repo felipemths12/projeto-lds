@@ -39,6 +39,7 @@ public class MatriculaService {
     @Autowired
     private MensagemService mensagemService;
 
+    @Transactional
     public Matricula matricular (MatriculaCadastroDTO matriculaCadastroDTO) {
         Aluno aluno = alunoRepository.findById(matriculaCadastroDTO.codigo_aluno())
                 .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
@@ -54,7 +55,7 @@ public class MatriculaService {
             throw new RuntimeException("Matrícula negada: Sem vagas disponíveis.");
         }
 
-        Long matriculasAtivas = matriculaRepository.countByTurmaAndStatusMatricula(turma, "ATIVO");
+        Long matriculasAtivas = matriculaRepository.countByTurmaAndStatusMatricula(turma, StatusGeral.ATIVO);
         if(matriculasAtivas >= turma.getNumero_vagas()) {
             throw new IllegalArgumentException("A turma já atingiu a capacidade máxima de vagas.");
         }
@@ -161,6 +162,9 @@ public class MatriculaService {
             Turma turma = matricula.getTurma();
             turma.setNumero_vagas(turma.getNumero_vagas() + 1);
             turmaRepository.save(turma);
+
+            // Persistimos a mudança de status da matrícula.
+            matriculaRepository.save(matricula);
         }
     }
 }

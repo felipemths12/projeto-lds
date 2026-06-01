@@ -22,7 +22,7 @@ public class Mensagem {
     private Long codigo_mensagem;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "codigo_aluno", nullable = false)
+    @JoinColumn(name = "codigo_aluno", nullable = true)
     private Aluno aluno;
 
     private String tipo_mensagem;
@@ -38,6 +38,6 @@ public class Mensagem {
     private Atendimento atendimento;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_funcionario", nullable = false)
+    @JoinColumn(name = "id_funcionario", nullable = true)
     private Funcionario funcionario;
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class FuncionarioService {
@@ -19,12 +20,18 @@ public class FuncionarioService {
     @Autowired
     private FuncionarioRepository funcionarioRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public Funcionario cadastrarFuncionario(FuncionarioCadastroDTO funcionarioCadastroDTO) {
         Funcionario funcionario = new Funcionario();
 
         funcionario.setNome(funcionarioCadastroDTO.nome());
         funcionario.setCPF(funcionarioCadastroDTO.cpf());
-        funcionario.setSenha_acesso(funcionarioCadastroDTO.senha());
+        
+        String senhaEncriptada = passwordEncoder.encode(funcionarioCadastroDTO.senha());
+        funcionario.setSenha_acesso(senhaEncriptada);
+        
         funcionario.setPerfil_cargo(Cargo.valueOf(funcionarioCadastroDTO.perfil_cargo().toUpperCase()));
         funcionario.setStatus_ativo(StatusGeral.ATIVO);
 

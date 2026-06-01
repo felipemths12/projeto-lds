@@ -48,7 +48,8 @@ public class Funcionario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_ " + this.getPerfil_cargo().name()));
+        // Sem espaço extra: o Spring Security espera o padrão ROLE_ADMIN, ROLE_ATENDENTE, etc.
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.getPerfil_cargo().name()));
     }
 
     @Override

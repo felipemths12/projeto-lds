@@ -1,6 +1,7 @@
 package com.projetolds.projetolds.service;
 
 import com.projetolds.projetolds.dto.mensagem.EnviarMensagemDTO;
+import com.projetolds.projetolds.dto.mensagem.MensagemListagemDTO;
 import com.projetolds.projetolds.model.Atendimento;
 import com.projetolds.projetolds.model.Mensagem;
 import com.projetolds.projetolds.model.enums.StatusEnvio;
@@ -32,7 +33,7 @@ public class MensagemService {
     private FuncionarioRepository funcionarioRepository;
 
     @Transactional
-    public Mensagem enviarMensagem(EnviarMensagemDTO enviarMensagemDTO) {
+    public MensagemListagemDTO enviarMensagem(EnviarMensagemDTO enviarMensagemDTO) {
         Atendimento atendimento = atendimentoRepository.findById(enviarMensagemDTO.numero_protocolo())
                 .orElseThrow(() -> new RuntimeException("Atendimento/protocolo não encontrado."));
 
@@ -54,13 +55,13 @@ public class MensagemService {
             throw new RuntimeException("Tipo de remetente inválido.");
         }
 
-        return mensagemRepository.save(mensagem);
+        return new MensagemListagemDTO(mensagemRepository.save(mensagem));
     }
 
-    public List<Mensagem> listarHistoricoDeMensagens(Long numero_protocolo) {
+    public List<MensagemListagemDTO> listarHistoricoDeMensagens(Long numero_protocolo) {
         Atendimento atendimento = atendimentoRepository.findById(numero_protocolo)
                 .orElseThrow(() -> new EntityNotFoundException("Protocolo não encontrado."));
 
-        return mensagemRepository.findByAtendimento(atendimento);
+        return mensagemRepository.findByAtendimento(atendimento).stream().map(MensagemListagemDTO::new).toList();
     }
 }

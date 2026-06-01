@@ -24,17 +24,27 @@ public class SecurityConfig {
                 .cors(cors -> cors.configure(http))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(ex -> ex.authenticationEntryPoint((request, response, authException) -> response.sendError(401, "Unauthorized")))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login", "/alunos").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 
+                        .requestMatchers(HttpMethod.GET, "/funcionarios").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/funcionarios").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/funcionarios").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/funcionarios/**").hasRole("ADMIN")
                         .requestMatchers("/funcionarios").hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.POST,"/cursos", "/turmas", "/matriculas").hasAnyRole("ADMIN", "ATENDENTE")
-                        .requestMatchers(HttpMethod.PUT, "/cursos", "/turmas", "/matriculas", "/alunos").hasAnyRole("ADMIN", "ATENDENTE")
+                        .requestMatchers(HttpMethod.POST,"/cursos", "/turmas").hasAnyRole("ADMIN", "ATENDENTE")
+                        .requestMatchers(HttpMethod.POST,"/matriculas").hasAnyRole("ADMIN", "ATENDENTE", "PROFESSOR")
+                        .requestMatchers(HttpMethod.PUT, "/cursos", "/turmas").hasAnyRole("ADMIN", "ATENDENTE", "PROFESSOR")
+                        .requestMatchers(HttpMethod.PUT, "/matriculas", "/alunos").hasAnyRole("ADMIN", "ATENDENTE")
                         .requestMatchers(HttpMethod.DELETE, "/cursos", "/turmas", "/matriculas", "/alunos").hasAnyRole("ADMIN", "ATENDENTE")
 
-                        .requestMatchers(HttpMethod.GET, "/cursos", "/turmas").authenticated()
+                        // O catálogo de cursos é público para visitantes sem login.
+                        .requestMatchers(HttpMethod.GET, "/cursos").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/turmas").authenticated()
 
                         .requestMatchers("/mensagens", "/atendimentos").authenticated()
 

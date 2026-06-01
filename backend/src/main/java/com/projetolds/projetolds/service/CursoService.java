@@ -12,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 @Service
 public class CursoService {
 
@@ -38,6 +41,16 @@ public class CursoService {
     public Curso atualizarCurso(CursoAtualizacaoDTO cursoAtualizacaoDTO) {
         Curso curso = cursoRepository.findById(cursoAtualizacaoDTO.codigo_curso())
                 .orElseThrow(() -> new RuntimeException("Curso não encontrado."));
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_PROFESSOR"))) {
+            String professorCpf = auth.getName();
+            boolean isAssociated = curso.getTurmas() != null && curso.getTurmas().stream()
+                    .anyMatch(t -> t.getProfessor().getCPF().equals(professorCpf));
+            if (!isAssociated) {
+                throw new RuntimeException("Acesso negado: Você só pode editar cursos aos quais está associado.");
+            }
+        }
 
         if(cursoAtualizacaoDTO.nome() != null) {
             curso.setNome(cursoAtualizacaoDTO.nome());

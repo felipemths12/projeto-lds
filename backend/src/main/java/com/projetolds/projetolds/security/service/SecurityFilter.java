@@ -1,6 +1,5 @@
 package com.projetolds.projetolds.security.service;
 
-import com.projetolds.projetolds.repository.AlunoRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,20 +19,27 @@ public class SecurityFilter extends OncePerRequestFilter {
     private TokenService tokenService;
 
     @Autowired
-    private AlunoRepository alunoRepository;
+    private AutenticacaoService autenticacaoService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var tokenJWT = recuperarToken(request);
 
-        if(tokenJWT != null) {
+        if (tokenJWT != null) {
             var subject = tokenService.validacaoToken(tokenJWT);
 
-            if(subject != null && !subject.isEmpty()) {
-                var usuario = alunoRepository.findByEmail(subject);
+            if (subject != null && !subject.isEmpty()) {
+                try {
+                    // Centralizamos a busca do usuário para suportar email (Aluno) e CPF (Funcionario).
+                    var usuario = autenticacaoService.loadUserByUsername(subject);
 
-                var autenticacao = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(autenticacao);
+                    if (usuario != null) {
+                        var autenticacao = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
+                        SecurityContextHolder.getContext().setAuthentication(autenticacao);
+                    }
+                } catch (Exception e) {
+                    // Se o token for válido mas o usuário não existir, seguimos sem autenticar.
+                }
             }
         }
 

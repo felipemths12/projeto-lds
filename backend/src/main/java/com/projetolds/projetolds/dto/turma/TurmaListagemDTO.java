@@ -8,10 +8,11 @@ public record TurmaListagemDTO(Long codigo_turma,
                                String turno,
                                Integer vagas,
                                String nome_curso,
-                               String nome_funcionario) {
+                               String nome_funcionario,
+                               String cpf_professor) {
 
     public TurmaListagemDTO(Turma turma) {
         this(turma.getCodigo_turma(), turma.getSemestre(), turma.getAno(), turma.getTurno(), turma.getNumero_vagas(),
-                turma.getCurso().getNome(), turma.getProfessor().getNome());
+                turma.getCurso().getNome(), turma.getProfessor().getNome(), turma.getProfessor().getCPF());
     }
 }
