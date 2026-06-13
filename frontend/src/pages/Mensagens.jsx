@@ -203,7 +203,7 @@ export default function Mensagens() {
                 </div>
                 <div className="contato-info">
                   <div className="contato-nome-tempo">
-                    <span className="c-nome">{atendimento.nome_aluno || atendimento.nome_funcionario}</span>
+                    <span className="c-nome">{usuario?.tipo === 'ALUNO' ? atendimento.nome_funcionario : (atendimento.nome_aluno || atendimento.nome_funcionario)}</span>
                     <span className="c-tempo">{atendimento.status_atendimento}</span>
                   </div>
                   <div className="c-role">{atendimento.assunto}</div>
@@ -223,7 +223,7 @@ export default function Mensagens() {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
               </div>
               <div>
-                <div className="c-nome-header">{atendimentoAtivo ? (atendimentoAtivo.nome_aluno || atendimentoAtivo.nome_funcionario) : 'Selecione um atendimento'}</div>
+                <div className="c-nome-header">{atendimentoAtivo ? (usuario?.tipo === 'ALUNO' ? atendimentoAtivo.nome_funcionario : (atendimentoAtivo.nome_aluno || atendimentoAtivo.nome_funcionario)) : 'Selecione um atendimento'}</div>
                 <div className="c-status">{atendimentoAtivo ? atendimentoAtivo.assunto : ''}</div>
               </div>
             </div>
