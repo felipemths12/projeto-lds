@@ -37,10 +37,11 @@ public class SecurityConfig {
                         .requestMatchers("/funcionarios").hasRole("ADMIN")
 
                         .requestMatchers(HttpMethod.POST,"/cursos", "/turmas").hasAnyRole("ADMIN", "ATENDENTE")
-                        .requestMatchers(HttpMethod.POST,"/matriculas").hasAnyRole("ADMIN", "ATENDENTE", "PROFESSOR")
+                        .requestMatchers(HttpMethod.POST,"/matriculas").hasAnyRole("ADMIN", "ATENDENTE", "PROFESSOR", "ALUNO")
                         .requestMatchers(HttpMethod.PUT, "/cursos", "/turmas").hasAnyRole("ADMIN", "ATENDENTE", "PROFESSOR")
                         .requestMatchers(HttpMethod.PUT, "/matriculas", "/alunos").hasAnyRole("ADMIN", "ATENDENTE")
                         .requestMatchers(HttpMethod.DELETE, "/cursos", "/turmas", "/matriculas", "/alunos").hasAnyRole("ADMIN", "ATENDENTE")
+                        .requestMatchers(HttpMethod.GET, "/estatisticas").hasAnyRole("ADMIN", "ATENDENTE")
 
                         // O catálogo de cursos é público para visitantes sem login.
                         .requestMatchers(HttpMethod.GET, "/cursos").permitAll()

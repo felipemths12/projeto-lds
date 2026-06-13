@@ -63,16 +63,6 @@ public class TurmaService {
 
     @Transactional
     public List<TurmaListagemDTO> listarTurmas() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ALUNO"))) {
-            Aluno aluno = (Aluno) alunoRepository.findByEmail(auth.getName());
-            return aluno.getMatriculas().stream()
-                    .filter(m -> m.getStatusMatricula() == com.projetolds.projetolds.model.enums.StatusGeral.ATIVO)
-                    .map(com.projetolds.projetolds.model.Matricula::getTurma)
-                    .distinct()
-                    .map(TurmaListagemDTO::new)
-                    .toList();
-        }
         return turmaRepository.findAll().stream().map(TurmaListagemDTO::new).toList();
     }
 

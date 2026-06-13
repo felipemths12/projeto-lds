@@ -26,6 +26,7 @@ public class Curso {
     private String nome;
     private String descricao;
     private Integer carga_horaria;
+    private Integer numero_vagas;
 
     @Enumerated(EnumType.STRING)
     private StatusCurso status_curso;

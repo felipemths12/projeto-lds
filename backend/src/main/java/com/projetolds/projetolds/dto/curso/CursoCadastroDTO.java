@@ -9,5 +9,7 @@ public record CursoCadastroDTO(
         String nome,
 
         @NotNull
-        Integer cargaHoraria
+        Integer cargaHoraria,
+
+        Integer numeroVagas
 ) {}

@@ -6,20 +6,20 @@ export const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(() => {
     try {
-      const salvo = localStorage.getItem('user');
+      const salvo = sessionStorage.getItem('user');
       return salvo ? JSON.parse(salvo) : null;
     } catch {
       return null;
     }
   });
 
-  const [token, setToken] = useState(() => localStorage.getItem('token') || null);
+  const [token, setToken] = useState(() => sessionStorage.getItem('token') || null);
 
   useEffect(() => {
     if (token) {
-      localStorage.setItem('token', token);
+      sessionStorage.setItem('token', token);
     } else {
-      localStorage.removeItem('token');
+      sessionStorage.removeItem('token');
     }
   }, [token]);
 
@@ -53,7 +53,7 @@ export function AuthProvider({ children }) {
 
     // Guardamos imediatamente para os interceptors já conseguirem ler o token.
     setToken(jwt);
-    localStorage.setItem('token', jwt);
+    sessionStorage.setItem('token', jwt);
 
     const payload = decodificarPayload(jwt);
     const subject = payload.sub || payload.subject || loginDigitado;
@@ -70,7 +70,7 @@ export function AuthProvider({ children }) {
           dados: usuarioEncontrado
         };
         setUsuario(usuarioFormatado);
-        localStorage.setItem('user', JSON.stringify(usuarioFormatado));
+        sessionStorage.setItem('user', JSON.stringify(usuarioFormatado));
         return usuarioFormatado;
       }
     } else {
@@ -86,22 +86,22 @@ export function AuthProvider({ children }) {
           dados: funcionarioEncontrado
         };
         setUsuario(usuarioFormatado);
-        localStorage.setItem('user', JSON.stringify(usuarioFormatado));
+        sessionStorage.setItem('user', JSON.stringify(usuarioFormatado));
         return usuarioFormatado;
       }
     }
 
     const usuarioFormatado = { tipo: 'DESCONHECIDO', cargo: null, subject };
     setUsuario(usuarioFormatado);
-    localStorage.setItem('user', JSON.stringify(usuarioFormatado));
+    sessionStorage.setItem('user', JSON.stringify(usuarioFormatado));
     return usuarioFormatado;
   }
 
   function logout() {
     setToken(null);
     setUsuario(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
     window.location.href = '/login';
   }
 
@@ -110,4 +110,4 @@ export function AuthProvider({ children }) {
       {children}
     </AuthContext.Provider>
   );
-}
+}

@@ -44,11 +44,13 @@ export default function NavBar() {
 
       <div className="navbar-links">
         <Link to="/" className={isActive('/')}>Home</Link>
+        {['ADMIN', 'ATENDENTE'].includes(usuario?.cargo) && <Link to="/dashboard" className={isActive('/dashboard')}>Dashboard</Link>}
         {usuario?.tipo !== 'ALUNO' && <Link to="/alunos" className={isActive('/alunos')}>Alunos</Link>}
         <Link to="/cursos" className={isActive('/cursos')}>Catálogo de Cursos</Link>
         <Link to="/turmas" className={isActive('/turmas')}>Turmas</Link>
-        {usuario?.tipo !== 'ALUNO' && <Link to="/matricula" className={isActive('/matricula')}>Matrícula</Link>}
+        <Link to="/matricula" className={isActive('/matricula')}>Matrícula</Link>
         {ehAdmin && <Link to="/funcionarios" className={isActive('/funcionarios')}>Funcionários</Link>}
+        {['ADMIN', 'ATENDENTE'].includes(usuario?.cargo) && <Link to="/estatisticas" className={isActive('/estatisticas')}>Estatísticas</Link>}
       </div>
 
       <div className="navbar-right">

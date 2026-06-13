@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useRef, useCallback } from 'react';
 import './Mensagens.css';
 import api from '../services/api';
 import { AuthContext } from '../contexts/AuthContext.jsx';
@@ -12,6 +12,7 @@ export default function Mensagens() {
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState('');
   const [isMobileList, setIsMobileList] = useState(true);
+  const chatMessagesRef = useRef(null);
 
   // Modal Novo Atendimento
   const [showModalNovoAtendimento, setShowModalNovoAtendimento] = useState(false);
@@ -19,13 +20,25 @@ export default function Mensagens() {
   const [opcoesTarget, setOpcoesTarget] = useState([]);
   const [criandoAtendimento, setCriandoAtendimento] = useState(false);
 
+  // Subtítulo contextual baseado no tipo de usuário
+  const subtitulo = usuario?.tipo === 'ALUNO'
+    ? 'Atendimento e comunicação com a instituição'
+    : 'Atendimento e comunicação com alunos';
+
+  // Auto-scroll para a última mensagem
+  function scrollParaFinal() {
+    if (chatMessagesRef.current) {
+      chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
+    }
+  }
+
   async function carregarAtendimentos() {
       setLoading(true);
       setErro('');
       try {
         const resposta = await api.get('/atendimentos');
         setAtendimentos(resposta.data || []);
-        if ((resposta.data || []).length > 0) {
+        if ((resposta.data || []).length > 0 && !atendimentoAtivo) {
           setAtendimentoAtivo(resposta.data[0]);
         }
       } catch (error) {
@@ -35,9 +48,25 @@ export default function Mensagens() {
       }
     }
 
+  // Função para recarregar atendimentos silenciosamente (polling)
+  const recarregarAtendimentosSilencioso = useCallback(async () => {
+    try {
+      const resposta = await api.get('/atendimentos');
+      setAtendimentos(resposta.data || []);
+    } catch (error) {
+      // Silencioso — não exibe erro no polling
+    }
+  }, []);
+
   useEffect(() => {
     carregarAtendimentos();
   }, []);
+
+  // Polling de atendimentos a cada 5 segundos
+  useEffect(() => {
+    const intervaloAtendimentos = setInterval(recarregarAtendimentosSilencioso, 5000);
+    return () => clearInterval(intervaloAtendimentos);
+  }, [recarregarAtendimentosSilencioso]);
 
   async function abrirModalNovo() {
     setNovoAtendimentoDados({ assunto: '', targetId: '' });
@@ -76,23 +105,38 @@ export default function Mensagens() {
     }
   }
 
-  useEffect(() => {
-    async function carregarMensagens() {
-      if (!atendimentoAtivo?.numero_protocolo) {
-        setMensagens([]);
-        return;
-      }
-
-      try {
-        const resposta = await api.get(`/mensagens/protocolo/${atendimentoAtivo.numero_protocolo}`);
-        setMensagens(resposta.data || []);
-      } catch (error) {
-        setMensagens([]);
-      }
+  // Carrega mensagens e faz polling a cada 5 segundos
+  const carregarMensagens = useCallback(async () => {
+    if (!atendimentoAtivo?.numero_protocolo) {
+      setMensagens([]);
+      return;
     }
 
-    carregarMensagens();
+    try {
+      const resposta = await api.get(`/mensagens/protocolo/${atendimentoAtivo.numero_protocolo}`);
+      setMensagens((anteriores) => {
+        const novas = resposta.data || [];
+        // Só atualiza se houver diferença (evita re-renders desnecessários)
+        if (novas.length !== anteriores.length) {
+          return novas;
+        }
+        return anteriores;
+      });
+    } catch (error) {
+      // Silencioso no polling
+    }
   }, [atendimentoAtivo]);
+
+  useEffect(() => {
+    carregarMensagens();
+    const intervaloMensagens = setInterval(carregarMensagens, 5000);
+    return () => clearInterval(intervaloMensagens);
+  }, [carregarMensagens]);
+
+  // Auto-scroll quando novas mensagens chegam
+  useEffect(() => {
+    scrollParaFinal();
+  }, [mensagens]);
 
   async function enviarMensagem() {
     if (!texto.trim() || !atendimentoAtivo) return;
@@ -108,9 +152,15 @@ export default function Mensagens() {
       const resposta = await api.post('/mensagens', payload);
       setMensagens((listaAtual) => [...listaAtual, resposta.data]);
       setTexto('');
-      alert('Mensagem enviada com sucesso.');
     } catch (error) {
       alert('Não foi possível enviar a mensagem.');
+    }
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      enviarMensagem();
     }
   }
 
@@ -119,7 +169,7 @@ export default function Mensagens() {
       <div className="mensagens-header-text" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <h1>Sistema de Mensagens</h1>
-          <p>Atendimento e comunicação com alunos</p>
+          <p>{subtitulo}</p>
         </div>
         <button className="btn-novo-curso" style={{ backgroundColor: '#4f46e5', alignSelf: 'center', marginTop: 0 }} onClick={abrirModalNovo}>
           Novo Atendimento
@@ -180,7 +230,7 @@ export default function Mensagens() {
             <div className="chat-header-actions"></div>
           </div>
 
-          <div className="chat-messages">
+          <div className="chat-messages" ref={chatMessagesRef}>
             {mensagens.map((mensagem) => {
               const isSentByMe = (usuario?.tipo === 'ALUNO' && String(mensagem.codigo_aluno) === String(usuario?.dados?.codigo_aluno)) ||
                                  (usuario?.tipo === 'FUNCIONARIO' && String(mensagem.id_funcionario) === String(usuario?.dados?.id_funcionario));
@@ -203,6 +253,7 @@ export default function Mensagens() {
               className="msg-input"
               value={texto}
               onChange={(e) => setTexto(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
             <button className="btn-send-msg" onClick={enviarMensagem}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
@@ -256,3 +307,4 @@ export default function Mensagens() {
     </div>
   );
 }
+

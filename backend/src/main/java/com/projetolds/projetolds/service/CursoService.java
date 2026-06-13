@@ -26,6 +26,9 @@ public class CursoService {
         Curso curso = new Curso();
         curso.setNome(dto.nome());
         curso.setCarga_horaria(dto.cargaHoraria());
+        if (dto.numeroVagas() != null) {
+            curso.setNumero_vagas(dto.numeroVagas());
+        }
 
         return cursoRepository.save(curso);
     }
@@ -58,6 +61,10 @@ public class CursoService {
 
         if (cursoAtualizacaoDTO.carga_horaria() != null) {
             curso.setCarga_horaria(cursoAtualizacaoDTO.carga_horaria());
+        }
+
+        if (cursoAtualizacaoDTO.numeroVagas() != null) {
+            curso.setNumero_vagas(cursoAtualizacaoDTO.numeroVagas());
         }
 
         return cursoRepository.save(curso);

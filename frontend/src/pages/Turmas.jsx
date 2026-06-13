@@ -169,12 +169,22 @@ export default function Turmas() {
     }
   }
 
+  async function deletarTurma(id) {
+    try {
+      await api.delete(`/turmas/${id}`);
+      alert('Turma excluída com sucesso!');
+      carregarTurmas();
+    } catch (error) {
+      alert('Erro ao excluir turma.');
+    }
+  }
+
   return (
     <div className="cursos-container">
       <div className="cursos-header">
         <div className="cursos-title">
           <h1>Turmas</h1>
-          <p>Visualização e gestão das turmas cadastradas</p>
+          <p>{usuario?.tipo === 'ALUNO' ? 'Veja as turmas disponíveis' : 'Visualização e gestão das turmas cadastradas'}</p>
         </div>
 
         {podeCriar && (
@@ -217,7 +227,17 @@ export default function Turmas() {
                 {podeEditarTurma(turma) && (
                   <>
                     <button className="btn-card-action" onClick={() => abrirModalEditar(turma)}>Editar</button>
-                    <button className="btn-card-action btn-matricular">Excluir</button>
+                    <button 
+                      className="btn-card-action" 
+                      style={{ backgroundColor: '#fee2e2', color: '#ef4444', borderColor: '#fecaca' }}
+                      onClick={() => {
+                        if (window.confirm('Tem certeza que deseja excluir esta turma?')) {
+                          deletarTurma(turma.codigo_turma || turma.id);
+                        }
+                      }}
+                    >
+                      Excluir
+                    </button>
                   </>
                 )}
               </div>

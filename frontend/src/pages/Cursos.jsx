@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Cursos.css';
 import api from '../services/api';
@@ -11,22 +11,22 @@ export default function Cursos() {
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState('');
 
-  useEffect(() => {
-    async function carregarCursos() {
-      setLoading(true);
-      setErro('');
-      try {
-        const resposta = await api.get('/cursos');
-        setCursos(resposta.data || []);
-      } catch (error) {
-        setErro('Não foi possível carregar os cursos.');
-      } finally {
-        setLoading(false);
-      }
+  const carregarCursos = useCallback(async () => {
+    setLoading(true);
+    setErro('');
+    try {
+      const resposta = await api.get('/cursos');
+      setCursos(resposta.data || []);
+    } catch (error) {
+      setErro('Não foi possível carregar os cursos.');
+    } finally {
+      setLoading(false);
     }
-
-    carregarCursos();
   }, []);
+
+  useEffect(() => {
+    carregarCursos();
+  }, [carregarCursos]);
 
   const podeCriar = usuario && usuario.tipo === 'FUNCIONARIO' && ['ADMIN', 'ATENDENTE'].includes(usuario.cargo);
 
@@ -41,12 +41,22 @@ export default function Cursos() {
     return false;
   }
 
+  async function inativarCurso(id) {
+    try {
+      await api.delete(`/cursos/${id}`);
+      alert('Curso inativado com sucesso!');
+      carregarCursos();
+    } catch (error) {
+      alert('Erro ao inativar curso.');
+    }
+  }
+
   return (
     <div className="cursos-container">
       <div className="cursos-header">
         <div className="cursos-title">
           <h1>Cursos e Turmas</h1>
-          <p>Gerencie as modalidades de ensino da instituição</p>
+          <p>{usuario?.tipo === 'ALUNO' ? 'Explore os cursos disponíveis na instituição' : 'Gerencie as modalidades de ensino da instituição'}</p>
         </div>
 
         {podeCriar && (
@@ -87,8 +97,19 @@ export default function Cursos() {
 
             {podeEditarCurso(curso) && (
               <div className="curso-card-actions">
-                <button className="btn-card-action" onClick={() => navigate('/formulario-curso')}>
+                <button className="btn-card-action" onClick={() => navigate('/formulario-curso', { state: { curso } })}>
                   Editar
+                </button>
+                <button 
+                  className="btn-card-action" 
+                  style={{ backgroundColor: '#fee2e2', color: '#ef4444', borderColor: '#fecaca' }}
+                  onClick={() => {
+                    if (window.confirm('Tem certeza que deseja inativar este curso?')) {
+                      inativarCurso(curso.codigo_curso);
+                    }
+                  }}
+                >
+                  Excluir
                 </button>
                 <button className="btn-card-action btn-matricular" onClick={() => navigate('/matricula')}>
                   Matricular

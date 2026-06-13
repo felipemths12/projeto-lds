@@ -9,5 +9,6 @@ public record CursoAtualizacaoDTO(
         Long codigo_curso,
 
         String nome,
-        Integer carga_horaria) {
+        Integer carga_horaria,
+        Integer numeroVagas) {
 }

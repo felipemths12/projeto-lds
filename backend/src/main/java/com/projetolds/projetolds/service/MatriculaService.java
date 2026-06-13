@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @Service
 public class MatriculaService {
@@ -60,38 +62,40 @@ public class MatriculaService {
             throw new IllegalArgumentException("A turma já atingiu a capacidade máxima de vagas.");
         }
 
-        Matricula matricula = new Matricula();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAluno = auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ALUNO"));
 
+        Matricula matricula = new Matricula();
         matricula.setAluno(aluno);
         matricula.setTurma(turma);
         matricula.setData_realizacao(LocalDateTime.now());
-        matricula.setStatusMatricula(StatusGeral.ATIVO);
+        matricula.setStatusMatricula(isAluno ? StatusGeral.PENDENTE : StatusGeral.ATIVO);
 
         Matricula salvarMatricula = matriculaRepository.save(matricula);
 
-        turma.setNumero_vagas(turma.getNumero_vagas() - 1);
-        turmaRepository.save(turma);
+        if (!isAluno) {
+            turma.setNumero_vagas(turma.getNumero_vagas() - 1);
+            turmaRepository.save(turma);
+        }
 
         AtendimentoCadastroDTO atendimentoCadastroDTO = new AtendimentoCadastroDTO(
-                "Confirmação de matrícula" + turma.getCurso().getNome(),
+                isAluno ? "Solicitação de matrícula pendente: " + turma.getCurso().getNome() : "Confirmação de matrícula: " + turma.getCurso().getNome(),
                 aluno.getCodigo_aluno(),
                 turma.getProfessor().getId_funcionario()
         );
 
         Atendimento atendimentoCriado = atendimentoService.abrirAtendimento(atendimentoCadastroDTO);
 
-        String confirmacaoMatricula = String.format(
-                "Olá, %s! Sua matrícula na turma do curso de %s foi confirmada com sucesso. Seja bem-vindo(a)!",
-                aluno.getNome(),
-                turma.getCurso().getNome()
-        );
+        String mensagem = isAluno 
+            ? String.format("Olá, %s! Sua solicitação de matrícula na turma do curso de %s foi recebida e está pendente de aprovação.", aluno.getNome(), turma.getCurso().getNome())
+            : String.format("Olá, %s! Sua matrícula na turma do curso de %s foi confirmada com sucesso. Seja bem-vindo(a)!", aluno.getNome(), turma.getCurso().getNome());
 
         EnviarMensagemDTO enviarMensagemDTO = new EnviarMensagemDTO(
-                confirmacaoMatricula,
+                mensagem,
                 atendimentoCriado.getNumero_protocolo(),
                 turma.getProfessor().getId_funcionario(),
                 "FUNCIONARIO"
-                );
+        );
 
         mensagemService.enviarMensagem(enviarMensagemDTO);
 
