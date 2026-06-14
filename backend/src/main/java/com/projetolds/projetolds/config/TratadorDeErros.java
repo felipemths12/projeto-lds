@@ -30,8 +30,9 @@ public class TratadorDeErros {
         return ResponseEntity.status(403).body("Acesso negado. Você não tem permissão para fazer isso.");
     }
 
-    @ExceptionHandler(IllegalAccessException.class)
-    public ResponseEntity erroRegraDeNegocio(IllegalAccessException exception) {
+    // Captura os erros de regra de negócio (como CPF ou RG duplicados) e retorna a mensagem como texto
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity erroRegraDeNegocio(IllegalArgumentException exception) {
         return ResponseEntity.badRequest().body(exception.getMessage());
     }
 }

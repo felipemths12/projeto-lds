@@ -25,6 +25,16 @@ public class AlunoService {
 
     @Transactional
     public Aluno cadastrarAluno(AlunoCadastroDTO dto) {
+        // Validação simples: Se o CPF já existir no banco, lança erro
+        if (alunoRepository.existsByCPF(dto.cpf())) {
+            throw new IllegalArgumentException("Este CPF já está cadastrado no sistema.");
+        }
+
+        // Validação simples: Se o RG já existir no banco, lança erro
+        if (alunoRepository.existsByRG(dto.rg())) {
+            throw new IllegalArgumentException("Este RG já está cadastrado no sistema.");
+        }
+
         Aluno aluno = new Aluno();
         aluno.setNome(dto.nome());
         aluno.setCPF(dto.cpf());
