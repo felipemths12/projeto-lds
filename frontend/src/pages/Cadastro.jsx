@@ -28,22 +28,29 @@ export default function Cadastro() {
       alert('Cadastro realizado com sucesso! Você já pode fazer login.');
       navigate('/login');
     } catch (error) {
-      if (error.response && error.response.data) {
-        const erroData = error.response.data;
+      // 1. Exibe o erro no console (F12) para ajudar a debugar se algo der errado
+      console.log("Erro da API:", error.response?.data);
 
-        if (Array.isArray(erroData)) {
-          let mensagensDeErro = "";
-          erroData.forEach(erro => {
-            mensagensDeErro += `${erro.campo}: ${erro.mensagem}\n`;
-          });
-          alert(mensagensDeErro);
-        } else if (typeof erroData === "string") {
-          alert(erroData);
-        } else {
-          alert("Ocorreu um erro inesperado. Verifique os dados e tente novamente.");
-        }
+      const dadosDoErro = error.response?.data;
+
+      // 2. Verifica se a resposta é um Array (Lista de erros do DTO validado pelo Spring)
+      if (Array.isArray(dadosDoErro)) {
+        let mensagemAmigavel = "Verifique os seguintes campos:\n\n";
+        
+        // 3. Percorre a lista de erros e monta a mensagem final
+        dadosDoErro.forEach(erro => {
+          mensagemAmigavel += `Erro no campo ${erro.campo}: ${erro.mensagem}\n`;
+        });
+        
+        alert(mensagemAmigavel);
+
+      // 4. Se não for Array, verifica se é uma String (Regra de negócio como "CPF Duplicado")
+      } else if (typeof dadosDoErro === 'string') {
+        alert(dadosDoErro);
+
+      // 5. Se não for nenhum dos anteriores, exibe a mensagem genérica de fallback
       } else {
-        alert("Erro de conexão com o servidor. Tente novamente mais tarde.");
+        alert("Ocorreu um erro ao realizar o cadastro. Verifique os dados e tente novamente.");
       }
     } finally {
       setLoading(false);
