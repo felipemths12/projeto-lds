@@ -18,6 +18,7 @@ export default function Cadastro() {
   const handleCadastro = async (e) => {
     e.preventDefault();
     setLoading(true);
+    
     try {
       const payload = {
         ...formData,
@@ -27,10 +28,22 @@ export default function Cadastro() {
       alert('Cadastro realizado com sucesso! Você já pode fazer login.');
       navigate('/login');
     } catch (error) {
-      if (error.response && error.response.status === 500) {
-        alert('Atenção: Esse CPF ou RG já está cadastrado no sistema!');
+      if (error.response && error.response.data) {
+        const erroData = error.response.data;
+
+        if (Array.isArray(erroData)) {
+          let mensagensDeErro = "";
+          erroData.forEach(erro => {
+            mensagensDeErro += `${erro.campo}: ${erro.mensagem}\n`;
+          });
+          alert(mensagensDeErro);
+        } else if (typeof erroData === "string") {
+          alert(erroData);
+        } else {
+          alert("Ocorreu um erro inesperado. Verifique os dados e tente novamente.");
+        }
       } else {
-        alert(error.response?.data?.message || 'Erro ao realizar o cadastro. Verifique os dados e tente novamente.');
+        alert("Erro de conexão com o servidor. Tente novamente mais tarde.");
       }
     } finally {
       setLoading(false);
