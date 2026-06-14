@@ -27,7 +27,11 @@ export default function Cadastro() {
       alert('Cadastro realizado com sucesso! Você já pode fazer login.');
       navigate('/login');
     } catch (error) {
-      alert(error.response?.data?.message || 'Erro ao realizar o cadastro. Verifique os dados e tente novamente.');
+      if (error.response && error.response.status === 500) {
+        alert('Atenção: Esse CPF ou RG já está cadastrado no sistema!');
+      } else {
+        alert(error.response?.data?.message || 'Erro ao realizar o cadastro. Verifique os dados e tente novamente.');
+      }
     } finally {
       setLoading(false);
     }
@@ -73,7 +77,7 @@ export default function Cadastro() {
             <div className="input-group">
               <label>Senha</label>
               <div className="input-wrapper">
-                <input type="password" name="senha" placeholder="•••••••" value={formData.senha} onChange={handleChange} required />
+                <input type="password" name="senha" placeholder="•••••••" value={formData.senha} onChange={handleChange} minLength={8} required />
               </div>
             </div>
             <div className="input-group">
