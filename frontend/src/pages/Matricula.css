@@ -274,3 +274,22 @@
     gap: 10px;
   }
 }
+
+@media (max-width: 480px) {
+  .matricula-container { padding: 15px; }
+  .matricula-header h1 { font-size: 22px; }
+  .stepper-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  .stepper-line { display: none; }
+  .step {
+    flex-direction: row;
+    gap: 10px;
+    padding: 0;
+  }
+  .step-circle { margin-bottom: 0; }
+  .step-label { text-align: left; font-size: 13px; }
+  .matricula-section { padding: 15px; }
+}

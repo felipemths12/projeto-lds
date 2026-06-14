@@ -153,3 +153,30 @@
 .estat-card:nth-child(4) { animation-delay: 0.4s; }
 .estat-card:nth-child(5) { animation-delay: 0.5s; }
 .estat-card:nth-child(6) { animation-delay: 0.6s; }
+
+@media (max-width: 768px) {
+  .estatisticas-container {
+    padding: 20px;
+  }
+  .estatisticas-header h1 {
+    font-size: 1.8rem;
+  }
+  .estatisticas-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .estatisticas-container {
+    padding: 15px;
+  }
+  .estatisticas-header h1 {
+    font-size: 1.5rem;
+  }
+  .estat-card {
+    padding: 20px;
+  }
+  .estat-value {
+    font-size: 2rem;
+  }
+}

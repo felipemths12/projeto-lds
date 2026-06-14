@@ -202,6 +202,12 @@
   background-color: #4338ca;
 }
 
+@media (max-width: 1024px) {
+  .cursos-filters {
+    flex-wrap: wrap;
+  }
+}
+
 @media (max-width: 768px) {
   .cursos-header {
     flex-direction: column;
@@ -223,5 +229,20 @@
   }
   .btn-card-action {
     width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .cursos-container {
+    padding: 15px;
+  }
+  .cursos-title h1 {
+    font-size: 22px;
+  }
+  .curso-card {
+    padding: 15px;
+  }
+  .cursos-grid {
+    grid-template-columns: 1fr;
   }
 }

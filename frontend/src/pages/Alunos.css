@@ -235,6 +235,12 @@
   justify-content: center;
 }
 
+@media (max-width: 1024px) {
+  .alunos-filters {
+    flex-wrap: wrap;
+  }
+}
+
 @media (max-width: 768px) {
   .alunos-header {
     flex-direction: column;
@@ -258,6 +264,22 @@
     flex-direction: column;
     gap: 15px;
     align-items: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .alunos-container {
+    padding: 15px;
+  }
+  .alunos-title h1 {
+    font-size: 22px;
+  }
+  .alunos-table th, .alunos-table td {
+    padding: 12px 10px;
+    font-size: 13px;
+  }
+  .modal-content {
+    padding: 20px;
   }
 }
 
