@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Cliente HTTP simples centralizado para evitar repetição de configuração.
 const api = axios.create({
-  baseURL: 'http://localhost:8080'
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080'
 });
 
 // Interceptor de requisição: injeta o JWT automaticamente em todas as chamadas.
@@ -33,4 +33,4 @@ api.interceptors.response.use(
   }
 );
 
-export default api;
+export default api;
